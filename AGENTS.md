@@ -8,6 +8,7 @@
 
 - Brug React med Vite.
 - Brug Tailwind CSS via `@tailwindcss/vite`.
+- Brug `lucide-react` som ikonbibliotek til spil og generelle UI-ikoner.
 - Appen deployes til GitHub Pages.
 - Standard produktionsbase er `/peter/`; brug `VITE_BASE_PATH`, hvis deploy-målet ændres.
 - UI-sproget er dansk.
@@ -31,6 +32,7 @@
 - Menu: kun `Om` lige nu
 - Forside: kun tile-grid med aktiviteter, uden hero-/forklaringstekst
 - Første aktivitet: `10'er-venner`, et matematikspil hvor elever vælger to tal fra 1-9, der tilsammen giver 10
+- Anden aktivitet: `Ord-match`, et desktop-only sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner.
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
 
@@ -54,6 +56,8 @@ Når versionen ændres, opdater `version` i `package.json`.
 - Tilføj nye spil som selvstændige komponenter eller mapper, så forsiden kan vokse uden rod.
 - Spil til de yngste elever skal kunne bruges med både mus, touch og gerne simple tastatur-/skærmlæser-signaler.
 - `10'er-venner` skal passe på én skærm uden lodret eller vandret scrollbar, også ved 1280x720 og små mobilvisninger.
+- `Ord-match` skal passe på én desktopskærm uden scrollbar. På mobil skal spillet ikke vises; vis i stedet en tydelig besked om at spillet kun virker på desktop.
+- I `Ord-match` skal klik på ord eller ikon oplæse ordet på det valgte sprog, men samme ord må ikke oplæses to gange i træk.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
 - Bevar dansk tekst og den venlige skole-tone.
 - Kør `npm run build` før en ændring betragtes som færdig.
