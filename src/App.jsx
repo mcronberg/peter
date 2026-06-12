@@ -1,4 +1,36 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Apple,
+  Armchair,
+  Bed,
+  Bike,
+  Bird,
+  BookOpen,
+  Bus,
+  Cake,
+  Camera,
+  Car,
+  Cat,
+  Clock,
+  Cloud,
+  Coffee,
+  Cookie,
+  Crown,
+  Dog,
+  Drum,
+  Fish,
+  Flower2,
+  Gift,
+  Glasses,
+  Guitar,
+  Heart,
+  House,
+  Key,
+  Lamp,
+  Moon,
+  Sun,
+  TreePine,
+} from 'lucide-react'
 
 const appVersion = __APP_VERSION__
 const numberColors = {
@@ -21,6 +53,48 @@ const confettiPieces = Array.from({ length: 42 }, (_, index) => ({
   color: ['#ff5c8a', '#ffd166', '#24c6dc', '#62e58d', '#9448ff', '#ff9f1c'][index % 6],
   shape: index % 3 === 0 ? 'round' : index % 3 === 1 ? 'wide' : 'tall',
 }))
+const speechLocales = {
+  da: 'da-DK',
+  en: 'en-US',
+  de: 'de-DE',
+}
+const languageLabels = {
+  da: 'Dansk',
+  en: 'Engelsk',
+  de: 'Tysk',
+}
+const wordItems = [
+  { id: 'apple', icon: Apple, da: 'æble', en: 'apple', de: 'Apfel' },
+  { id: 'dog', icon: Dog, da: 'hund', en: 'dog', de: 'Hund' },
+  { id: 'cat', icon: Cat, da: 'kat', en: 'cat', de: 'Katze' },
+  { id: 'fish', icon: Fish, da: 'fisk', en: 'fish', de: 'Fisch' },
+  { id: 'car', icon: Car, da: 'bil', en: 'car', de: 'Auto' },
+  { id: 'house', icon: House, da: 'hus', en: 'house', de: 'Haus' },
+  { id: 'book', icon: BookOpen, da: 'bog', en: 'book', de: 'Buch' },
+  { id: 'sun', icon: Sun, da: 'sol', en: 'sun', de: 'Sonne' },
+  { id: 'moon', icon: Moon, da: 'måne', en: 'moon', de: 'Mond' },
+  { id: 'tree', icon: TreePine, da: 'træ', en: 'tree', de: 'Baum' },
+  { id: 'bird', icon: Bird, da: 'fugl', en: 'bird', de: 'Vogel' },
+  { id: 'flower', icon: Flower2, da: 'blomst', en: 'flower', de: 'Blume' },
+  { id: 'chair', icon: Armchair, da: 'stol', en: 'chair', de: 'Stuhl' },
+  { id: 'bed', icon: Bed, da: 'seng', en: 'bed', de: 'Bett' },
+  { id: 'bike', icon: Bike, da: 'cykel', en: 'bike', de: 'Fahrrad' },
+  { id: 'bus', icon: Bus, da: 'bus', en: 'bus', de: 'Bus' },
+  { id: 'cake', icon: Cake, da: 'kage', en: 'cake', de: 'Kuchen' },
+  { id: 'camera', icon: Camera, da: 'kamera', en: 'camera', de: 'Kamera' },
+  { id: 'clock', icon: Clock, da: 'ur', en: 'clock', de: 'Uhr' },
+  { id: 'cloud', icon: Cloud, da: 'sky', en: 'cloud', de: 'Wolke' },
+  { id: 'cup', icon: Coffee, da: 'kop', en: 'cup', de: 'Tasse' },
+  { id: 'cookie', icon: Cookie, da: 'kiks', en: 'cookie', de: 'Keks' },
+  { id: 'crown', icon: Crown, da: 'krone', en: 'crown', de: 'Krone' },
+  { id: 'drum', icon: Drum, da: 'tromme', en: 'drum', de: 'Trommel' },
+  { id: 'gift', icon: Gift, da: 'gave', en: 'gift', de: 'Geschenk' },
+  { id: 'glasses', icon: Glasses, da: 'briller', en: 'glasses', de: 'Brille' },
+  { id: 'guitar', icon: Guitar, da: 'guitar', en: 'guitar', de: 'Gitarre' },
+  { id: 'heart', icon: Heart, da: 'hjerte', en: 'heart', de: 'Herz' },
+  { id: 'key', icon: Key, da: 'nøgle', en: 'key', de: 'Schlüssel' },
+  { id: 'lamp', icon: Lamp, da: 'lampe', en: 'lamp', de: 'Lampe' },
+]
 
 function shuffle(items) {
   const next = [...items]
@@ -94,7 +168,7 @@ function useCurrentView() {
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
-  return ['om', 'tier-venner'].includes(view) ? view : 'hjem'
+  return ['om', 'tier-venner', 'ord-match'].includes(view) ? view : 'hjem'
 }
 
 function useVersionNotice() {
@@ -129,7 +203,13 @@ function Header({ view }) {
   return (
     <header className="site-header">
       <a className="brand" href="#hjem" aria-label="Gå til forsiden">
-        <span className="brand-mark">10</span>
+        <span className="brand-mark" aria-hidden="true">
+          <span>+</span>
+          <span>A</span>
+          <span>-</span>
+          <span>C</span>
+          <span>B</span>
+        </span>
         <span>peter.app</span>
       </a>
       <nav className="main-nav" aria-label="Hovedmenu">
@@ -174,6 +254,14 @@ function Home() {
         href: '#tier-venner',
         icon: '10',
       },
+      {
+        title: 'Ord-match',
+        subject: 'Sprog',
+        description: 'Match ord og ikoner på dansk, engelsk eller tysk.',
+        accent: 'tile-words',
+        href: '#ord-match',
+        icon: 'ABC',
+      },
     ],
     [],
   )
@@ -196,6 +284,221 @@ function Home() {
             </a>
           ))}
         </div>
+      </section>
+    </main>
+  )
+}
+
+function speakWord(item, language, lastSpokenRef) {
+  const word = item[language]
+  const speechKey = `${item.id}-${language}`
+
+  if (!window.speechSynthesis || lastSpokenRef.current === speechKey) return
+
+  window.speechSynthesis.cancel()
+  const utterance = new SpeechSynthesisUtterance(word)
+  utterance.lang = speechLocales[language]
+  utterance.rate = 0.86
+  utterance.pitch = 1.04
+  lastSpokenRef.current = speechKey
+  window.speechSynthesis.speak(utterance)
+}
+
+function createWordRound() {
+  const picked = shuffle(wordItems).slice(0, 10)
+  return {
+    items: picked,
+    words: shuffle(picked),
+    icons: shuffle(picked),
+  }
+}
+
+function WordMatchGame() {
+  const [language, setLanguage] = useState('da')
+  const [round, setRound] = useState(() => createWordRound())
+  const [matchedIds, setMatchedIds] = useState([])
+  const [message, setMessage] = useState('Træk et ord til et ikon, eller et ikon til et ord.')
+  const [dragged, setDragged] = useState(null)
+  const [picked, setPicked] = useState(null)
+  const lastSpokenRef = useRef(null)
+  const score = matchedIds.length
+  const isComplete = score === round.items.length
+
+  const resetWordGame = () => {
+    setRound(createWordRound())
+    setMatchedIds([])
+    setDragged(null)
+    setPicked(null)
+    setMessage('Ny runde. Match alle 10 ord.')
+    lastSpokenRef.current = null
+  }
+
+  const setDragData = (event, type, item) => {
+    const data = { type, id: item.id }
+    setDragged(data)
+    event.dataTransfer.setData('application/json', JSON.stringify(data))
+    event.dataTransfer.effectAllowed = 'move'
+  }
+
+  const readDragData = (event) => {
+    try {
+      return JSON.parse(event.dataTransfer.getData('application/json'))
+    } catch {
+      return dragged
+    }
+  }
+
+  const tryMatch = (source, targetType, targetItem) => {
+    if (!source || source.type === targetType || matchedIds.includes(targetItem.id)) return
+
+    if (source.id === targetItem.id) {
+      setMatchedIds((current) => [...current, targetItem.id])
+      setMessage(`${targetItem[language]} er matchet.`)
+      playTone(score + 1 === round.items.length ? 'finish' : 'success', true)
+      return
+    }
+
+    setMessage('Ikke helt. Prøv et andet par.')
+    playTone('miss', true)
+  }
+
+  const handleDropOn = (event, targetType, item) => {
+    event.preventDefault()
+    tryMatch(readDragData(event), targetType, item)
+    setDragged(null)
+    setPicked(null)
+  }
+
+  const handleTileClick = (item, type) => {
+    speakWord(item, language, lastSpokenRef)
+
+    if (matchedIds.includes(item.id)) return
+
+    if (!picked || picked.type === type) {
+      setPicked({ type, id: item.id })
+      return
+    }
+
+    tryMatch(picked, type, item)
+    setPicked(null)
+  }
+
+  const renderWordCard = (item) => {
+    const matched = matchedIds.includes(item.id)
+
+    return (
+      <button
+        type="button"
+        className={`word-card ${matched ? 'matched' : ''} ${picked?.type === 'word' && picked.id === item.id ? 'picked' : ''}`}
+        data-word-id={item.id}
+        draggable={!matched}
+        key={`word-${item.id}`}
+        onClick={() => handleTileClick(item, 'word')}
+        onDragStart={(event) => setDragData(event, 'word', item)}
+        onDragEnd={() => setDragged(null)}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => handleDropOn(event, 'word', item)}
+      >
+        {item[language]}
+      </button>
+    )
+  }
+
+  const renderIconCard = (item) => {
+    const Icon = item.icon
+    const matched = matchedIds.includes(item.id)
+
+    return (
+      <button
+        type="button"
+        className={`word-icon-card ${matched ? 'matched' : ''} ${picked?.type === 'icon' && picked.id === item.id ? 'picked' : ''}`}
+        data-icon-id={item.id}
+        draggable={!matched}
+        key={`icon-${item.id}`}
+        onClick={() => handleTileClick(item, 'icon')}
+        onDragStart={(event) => setDragData(event, 'icon', item)}
+        onDragEnd={() => setDragged(null)}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => handleDropOn(event, 'icon', item)}
+        aria-label={item[language]}
+      >
+        <Icon aria-hidden="true" strokeWidth={2.6} />
+      </button>
+    )
+  }
+
+  return (
+    <main className="word-game-shell">
+      <section className="desktop-only-notice">
+        <h1>Ord-match</h1>
+        <p>Dette spil virker kun på desktop.</p>
+      </section>
+
+      <section className="word-game-desktop">
+        <div className="word-game-topbar">
+          <div>
+            <p className="kicker">Sprog</p>
+            <h1>Ord-match</h1>
+          </div>
+          <div className="word-controls">
+            <label>
+              Sprog
+              <select value={language} onChange={(event) => setLanguage(event.target.value)}>
+                {Object.entries(languageLabels).map(([code, label]) => (
+                  <option key={code} value={code}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <span className="score-pill">Score: {score} / {round.items.length}</span>
+            <button type="button" className="icon-button" onClick={resetWordGame}>
+              Spil igen
+            </button>
+          </div>
+        </div>
+
+        <div className="word-board">
+          <section className="word-column" aria-label="Ord">
+            <h2>Ord</h2>
+            <div className="word-card-grid">{round.words.map(renderWordCard)}</div>
+          </section>
+          <section className="word-column" aria-label="Ikoner">
+            <h2>Ikoner</h2>
+            <div className="word-card-grid">{round.icons.map(renderIconCard)}</div>
+          </section>
+        </div>
+
+        <p className="word-message" aria-live="polite">
+          {isComplete ? 'Flot. Alle ord er matchet.' : message}
+        </p>
+
+        {isComplete && (
+          <>
+            <div className="confetti" aria-hidden="true">
+              {confettiPieces.map((piece) => (
+                <span
+                  className={`confetti-piece ${piece.shape}`}
+                  key={piece.id}
+                  style={{
+                    '--confetti-left': piece.left,
+                    '--confetti-delay': piece.delay,
+                    '--confetti-duration': piece.duration,
+                    '--confetti-drift': piece.drift,
+                    '--confetti-color': piece.color,
+                  }}
+                />
+              ))}
+            </div>
+            <section className="finish-panel" aria-live="polite">
+              <h2>Godt matchet</h2>
+              <p>Alle 10 ord og ikoner passer sammen.</p>
+              <button type="button" onClick={resetWordGame}>
+                Spil igen
+              </button>
+            </section>
+          </>
+        )}
       </section>
     </main>
   )
@@ -416,10 +719,10 @@ export default function App() {
   const latestVersion = useVersionNotice()
 
   return (
-    <div className="app">
+    <div className={`app ${view === 'tier-venner' || view === 'ord-match' ? 'game-app' : ''}`}>
       <Header view={view} />
       <VersionNotice latestVersion={latestVersion} />
-      {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : <Home />}
+      {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame /> : <Home />}
       <Footer />
     </div>
   )

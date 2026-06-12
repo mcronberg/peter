@@ -53,6 +53,7 @@ Når versionen ændres, opdater `version` i `package.json`.
 - Hold ændringer små og lette at forstå.
 - Tilføj nye spil som selvstændige komponenter eller mapper, så forsiden kan vokse uden rod.
 - Spil til de yngste elever skal kunne bruges med både mus, touch og gerne simple tastatur-/skærmlæser-signaler.
+- `10'er-venner` skal passe på én skærm uden lodret eller vandret scrollbar, også ved 1280x720 og små mobilvisninger.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
 - Bevar dansk tekst og den venlige skole-tone.
 - Kør `npm run build` før en ændring betragtes som færdig.
