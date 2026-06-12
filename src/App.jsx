@@ -12,6 +12,15 @@ const numberColors = {
   8: 'mint',
   9: 'violet',
 }
+const confettiPieces = Array.from({ length: 42 }, (_, index) => ({
+  id: index,
+  left: `${4 + ((index * 23) % 92)}%`,
+  delay: `${(index % 9) * 0.08}s`,
+  duration: `${1.9 + (index % 5) * 0.18}s`,
+  drift: `${((index % 7) - 3) * 18}px`,
+  color: ['#ff5c8a', '#ffd166', '#24c6dc', '#62e58d', '#9448ff', '#ff9f1c'][index % 6],
+  shape: index % 3 === 0 ? 'round' : index % 3 === 1 ? 'wide' : 'tall',
+}))
 
 function shuffle(items) {
   const next = [...items]
@@ -165,38 +174,14 @@ function Home() {
         href: '#tier-venner',
         icon: '10',
       },
-      {
-        title: 'Kommer snart',
-        subject: 'Spil og øvelser',
-        description: 'Her lander den næste aktivitet til klassen.',
-        accent: 'tile-sun',
-        href: '#hjem',
-        icon: '?',
-      },
     ],
     [],
   )
 
   return (
-    <main className="page-shell">
-      <section className="hero" aria-labelledby="home-title">
-        <div className="hero-copy">
-          <p className="kicker">Små digitale aktiviteter til 1.-3. klasse</p>
-          <h1 id="home-title">Leg og læring</h1>
-          <p>
-            peter.app samler små spil, animationer og præsentationer, som er nemme at åbne på tavlen og rolige nok til at bruge i undervisningen.
-          </p>
-        </div>
-        <div className="shape-board" aria-hidden="true">
-          <span className="shape circle">1</span>
-          <span className="shape square">Aa</span>
-          <span className="shape triangle">+</span>
-        </div>
-      </section>
-
-      <section className="tiles-section" aria-labelledby="tiles-title">
+    <main className="page-shell home-shell">
+      <section className="tiles-section home-tiles" aria-labelledby="tiles-title">
         <div className="section-heading">
-          <p className="kicker">Bibliotek</p>
           <h2 id="tiles-title">Aktiviteter</h2>
         </div>
         <div className="tile-grid">
@@ -371,13 +356,30 @@ function TenFriendsGame() {
       </section>
 
       {isComplete && (
-        <section className="finish-panel" aria-live="polite">
-          <h2>Flot fundet</h2>
-          <p>Alle tal er væk, og alle par blev til 10.</p>
-          <button type="button" onClick={resetGame}>
-            Spil igen
-          </button>
-        </section>
+        <>
+          <div className="confetti" aria-hidden="true">
+            {confettiPieces.map((piece) => (
+              <span
+                className={`confetti-piece ${piece.shape}`}
+                key={piece.id}
+                style={{
+                  '--confetti-left': piece.left,
+                  '--confetti-delay': piece.delay,
+                  '--confetti-duration': piece.duration,
+                  '--confetti-drift': piece.drift,
+                  '--confetti-color': piece.color,
+                }}
+              />
+            ))}
+          </div>
+          <section className="finish-panel" aria-live="polite">
+            <h2>Flot fundet</h2>
+            <p>Alle tal er væk, og alle par blev til 10.</p>
+            <button type="button" onClick={resetGame}>
+              Spil igen
+            </button>
+          </section>
+        </>
       )}
     </main>
   )

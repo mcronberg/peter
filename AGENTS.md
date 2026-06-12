@@ -22,13 +22,14 @@
 - Brug store klikområder, tydelige kontraster og stabile dimensioner.
 - Undgå lange forklaringstekster i selve appen.
 - Forsiden skal være selve oplevelsen, ikke en marketing-landingpage.
+- Forsiden skal kun vise tiles for rigtige aktiviteter; undgå `kommer snart`-kort.
 - Hold kort/tiles enkle: titel, fag/type, kort beskrivelse og gerne tydelig status.
 
 ## Nuværende appstruktur
 
 - Header: `peter.app`
 - Menu: kun `Om` lige nu
-- Forside: tile-grid med aktiviteter
+- Forside: kun tile-grid med aktiviteter, uden hero-/forklaringstekst
 - Første aktivitet: `10'er-venner`, et matematikspil hvor elever vælger to tal fra 1-9, der tilsammen giver 10
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
