@@ -231,6 +231,7 @@ button {
 h1,
 h2,
 h3,
+h4,
 p {
   margin-top: 0;
 }
@@ -272,6 +273,18 @@ h1 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
   gap: 18px;
+}
+
+.category-list {
+  display: grid;
+  gap: 28px;
+}
+
+.activity-category h3 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font-size: clamp(1.35rem, 1.1rem + 0.9vw, 2rem);
+  line-height: 1;
 }
 
 .activity-tile {
@@ -329,7 +342,7 @@ h1 {
   text-transform: uppercase;
 }
 
-.activity-tile h3 {
+.activity-tile h4 {
   margin-bottom: 8px;
   color: var(--ink);
   font-size: 1.7rem;

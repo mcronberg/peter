@@ -63,6 +63,11 @@ const languageLabels = {
   en: 'Engelsk',
   de: 'Tysk',
 }
+const languageFlags = {
+  da: '🇩🇰',
+  en: '🇬🇧',
+  de: '🇩🇪',
+}
 const wordItems = [
   { id: 'apple', icon: Apple, da: 'æble', en: 'apple', de: 'Apfel' },
   { id: 'dog', icon: Dog, da: 'hund', en: 'dog', de: 'Hund' },
@@ -168,7 +173,29 @@ function useCurrentView() {
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
-  return ['om', 'tier-venner', 'ord-match'].includes(view) ? view : 'hjem'
+  if (view.startsWith('ord-match')) return 'ord-match'
+  return ['om', 'tier-venner'].includes(view) ? view : 'hjem'
+}
+
+function useWordMatchLanguage() {
+  const [language, setLanguage] = useState(() => {
+    const hashLanguage = window.location.hash.replace('#ord-match-', '')
+    return languageLabels[hashLanguage] ? hashLanguage : 'da'
+  })
+
+  useEffect(() => {
+    const onHashChange = () => {
+      const hashLanguage = window.location.hash.replace('#ord-match-', '')
+      if (languageLabels[hashLanguage]) {
+        setLanguage(hashLanguage)
+      }
+    }
+
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  return language
 }
 
 function useVersionNotice() {
@@ -244,23 +271,49 @@ function VersionNotice({ latestVersion }) {
 }
 
 function Home() {
-  const tiles = useMemo(
+  const categories = useMemo(
     () => [
       {
-        title: "10'er-venner",
-        subject: 'Matematik',
-        description: 'Find to tal, der giver 10.',
-        accent: 'tile-game',
-        href: '#tier-venner',
-        icon: '10',
+        title: 'Tal',
+        tiles: [
+          {
+            title: "10'er-venner",
+            subject: 'Matematik',
+            description: 'Find to tal, der giver 10.',
+            accent: 'tile-game',
+            href: '#tier-venner',
+            icon: '10',
+          },
+        ],
       },
       {
-        title: 'Ord-match',
-        subject: 'Sprog',
-        description: 'Match ord og ikoner på dansk, engelsk eller tysk.',
-        accent: 'tile-words',
-        href: '#ord-match',
-        icon: 'ABC',
+        title: 'Sprog',
+        tiles: [
+          {
+            title: 'Ord-match',
+            subject: 'Dansk',
+            description: 'Match ord og ikoner på dansk.',
+            accent: 'tile-words',
+            href: '#ord-match-da',
+            icon: languageFlags.da,
+          },
+          {
+            title: 'Word match',
+            subject: 'Engelsk',
+            description: 'Match words and icons in English.',
+            accent: 'tile-words',
+            href: '#ord-match-en',
+            icon: languageFlags.en,
+          },
+          {
+            title: 'Wort-Match',
+            subject: 'Tysk',
+            description: 'Match ord og ikoner på tysk.',
+            accent: 'tile-words',
+            href: '#ord-match-de',
+            icon: languageFlags.de,
+          },
+        ],
       },
     ],
     [],
@@ -272,16 +325,23 @@ function Home() {
         <div className="section-heading">
           <h2 id="tiles-title">Aktiviteter</h2>
         </div>
-        <div className="tile-grid">
-          {tiles.map((tile) => (
-            <a className={`activity-tile ${tile.accent}`} data-activity={tile.href.replace('#', '')} href={tile.href} key={tile.title}>
-              <div className="tile-icon" aria-hidden="true">
-                {tile.icon}
+        <div className="category-list">
+          {categories.map((category) => (
+            <section className="activity-category" aria-labelledby={`category-${category.title}`} key={category.title}>
+              <h3 id={`category-${category.title}`}>{category.title}</h3>
+              <div className="tile-grid">
+                {category.tiles.map((tile) => (
+                  <a className={`activity-tile ${tile.accent}`} data-activity={tile.href.replace('#', '')} href={tile.href} key={tile.href}>
+                    <div className="tile-icon" aria-hidden="true">
+                      {tile.icon}
+                    </div>
+                    <p>{tile.subject}</p>
+                    <h4>{tile.title}</h4>
+                    <span>{tile.description}</span>
+                  </a>
+                ))}
               </div>
-              <p>{tile.subject}</p>
-              <h3>{tile.title}</h3>
-              <span>{tile.description}</span>
-            </a>
+            </section>
           ))}
         </div>
       </section>
@@ -313,8 +373,8 @@ function createWordRound() {
   }
 }
 
-function WordMatchGame() {
-  const [language, setLanguage] = useState('da')
+function WordMatchGame({ initialLanguage }) {
+  const [language, setLanguage] = useState(initialLanguage)
   const [round, setRound] = useState(() => createWordRound())
   const [matchedIds, setMatchedIds] = useState([])
   const [message, setMessage] = useState('Træk eller tryk et ord og ikon sammen.')
@@ -323,6 +383,11 @@ function WordMatchGame() {
   const lastSpokenRef = useRef(null)
   const score = matchedIds.length
   const isComplete = score === round.items.length
+
+  useEffect(() => {
+    setLanguage(initialLanguage)
+    lastSpokenRef.current = null
+  }, [initialLanguage])
 
   const resetWordGame = () => {
     setRound(createWordRound())
@@ -433,7 +498,7 @@ function WordMatchGame() {
         <div className="word-game-topbar">
           <div>
             <p className="kicker">Sprog</p>
-            <h1>Ord-match</h1>
+            <h1>{languageFlags[language]} Ord-match</h1>
           </div>
           <div className="word-controls">
             <label>
@@ -711,13 +776,14 @@ function Footer() {
 
 export default function App() {
   const view = useCurrentView()
+  const wordMatchLanguage = useWordMatchLanguage()
   const latestVersion = useVersionNotice()
 
   return (
     <div className={`app ${view === 'tier-venner' || view === 'ord-match' ? 'game-app' : ''}`}>
       <Header view={view} />
       <VersionNotice latestVersion={latestVersion} />
-      {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame /> : <Home />}
+      {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame initialLanguage={wordMatchLanguage} /> : <Home />}
       <Footer />
     </div>
   )

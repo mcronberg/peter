@@ -30,9 +30,9 @@
 
 - Header: `PetersApp`
 - Menu: kun `Om` lige nu
-- Forside: kun tile-grid med aktiviteter, uden hero-/forklaringstekst
+- Forside: kun kategoriserede tile-grids med aktiviteter, uden hero-/forklaringstekst. Brug foreløbigt kategorierne `Tal` og `Sprog`.
 - Første aktivitet: `10'er-venner`, et matematikspil hvor elever vælger to tal fra 1-9, der tilsammen giver 10
-- Anden aktivitet: `Ord-match`, et sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner.
+- Anden aktivitet: `Ord-match`, et sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner. Forsiden skal kunne starte spillet direkte på dansk, engelsk eller tysk med tekst og flag.
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
 
