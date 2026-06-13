@@ -38,6 +38,20 @@
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
 
+## Kodestruktur
+
+Koden er opdelt i fokuserede moduler under `src/` – ét spil/komponent pr. fil:
+
+- `src/App.jsx` – kun routing og layout-shell. Hvert nyt spil/side tilføjes som en `case` i `renderView`.
+- `src/main.jsx` – React-rod.
+- `src/games/` – ét spil pr. fil (`TenFriendsGame`, `ShareApplesGame`, `BuildRowsGame`, `WordMatchGame`). Spil-specifik data (fx regnestykker, farver) og hjælpere (fx `createXRound`, billed-komponenter) bor i samme fil som spillet.
+- `src/components/` – delte UI-komponenter (`Header`, `Footer`, `Home`, `About`, `VersionNotice`, `ErrorBoundary`, `Celebration`, `Flags`).
+- `src/hooks/` – delte hooks (`useCurrentView`, `useWordMatchLanguage`, `useVersionNotice`).
+- `src/lib/` – rene hjælpere uden UI (`shuffle`, `audio`/`playTone`, `speech`/`speakWord`, `version`).
+- `src/data/` – delt data (`words`, `languages`, `looks`).
+
+Retningslinje: hold spil selvstændige; flyt først noget til `components`/`lib`/`data`, når det faktisk deles af flere spil.
+
 ## Cache og versioner
 
 GitHub Pages kan cache aggressivt. Undgå service worker/PWA, medmindre der senere er en meget klar grund.
