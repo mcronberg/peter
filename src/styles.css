@@ -314,6 +314,10 @@ h1 {
   background: linear-gradient(150deg, #ffb86b 0%, #fff0a8 48%, #9ee8dc 100%);
 }
 
+.tile-apples {
+  background: linear-gradient(150deg, #ff9f9f 0%, #fff6bf 48%, #a8ef5a 100%);
+}
+
 .activity-tile:hover {
   box-shadow: 0 16px 34px rgb(36 48 68 / 17%);
   transform: translate(-2px, -2px);
@@ -800,6 +804,199 @@ h1 {
   font-weight: 800;
 }
 
+.share-game-shell {
+  width: min(1120px, calc(100% - 24px));
+  height: calc(100vh - 104px);
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 0 8px;
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto minmax(96px, 0.52fr) minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.share-game-topbar,
+.share-message,
+.apple-pool,
+.child-station {
+  border: 2px solid rgb(36 48 68 / 12%);
+  border-radius: 16px;
+  background: rgb(255 254 248 / 86%);
+  box-shadow: 0 10px 24px rgb(36 48 68 / 10%);
+}
+
+.share-game-topbar {
+  min-height: 78px;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.share-game-topbar h1 {
+  margin: 0;
+  color: #d7265f;
+  font-size: clamp(1.8rem, 1.25rem + 2vw, 3.2rem);
+  line-height: 0.9;
+}
+
+.share-equation {
+  min-width: 104px;
+  padding: 6px 16px 7px;
+  border: 2px solid rgb(36 48 68 / 14%);
+  border-radius: 14px;
+  background: #fff6bf;
+  color: var(--ink);
+  display: grid;
+  grid-template-rows: auto 3px auto;
+  align-items: center;
+  justify-items: center;
+  font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+  font-weight: 950;
+  line-height: 0.85;
+}
+
+.share-equation span:nth-child(2) {
+  width: 100%;
+  min-width: 44px;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.share-message {
+  min-height: 34px;
+  margin: 0;
+  padding: 5px 12px;
+  color: var(--ink);
+  text-align: center;
+  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.25rem);
+  font-weight: 900;
+}
+
+.share-message.lower {
+  min-height: 30px;
+  font-size: 1rem;
+}
+
+.apple-pool {
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+
+.apple-pool.ready,
+.apple-box.ready {
+  border-color: #2f80ed;
+  box-shadow:
+    0 10px 24px rgb(36 48 68 / 10%),
+    0 0 0 4px rgb(47 128 237 / 12%);
+}
+
+.apple-button,
+.boxed-apple-button {
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+}
+
+.share-apple {
+  width: var(--apple-size);
+  max-width: 82px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 12px rgb(36 48 68 / 18%));
+  transform: rotate(var(--apple-rotate));
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.share-apple.selected {
+  filter:
+    drop-shadow(0 0 0 #2f80ed)
+    drop-shadow(0 12px 12px rgb(36 48 68 / 20%));
+  transform: rotate(var(--apple-rotate)) scale(1.14);
+}
+
+.children-board {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.child-station {
+  min-height: 0;
+  padding: 8px;
+  display: grid;
+  grid-template-rows: minmax(0, 0.95fr) minmax(92px, 1fr);
+  gap: 6px;
+}
+
+.child-picture {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 12px 14px rgb(36 48 68 / 16%));
+}
+
+.apple-box {
+  width: 100%;
+  min-height: 0;
+  border: 2px solid rgb(36 48 68 / 12%);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 74%), rgb(255 246 191 / 78%)),
+    #fffef8;
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: 6px;
+  position: relative;
+}
+
+.apple-count {
+  min-width: 34px;
+  min-height: 30px;
+  border: 2px solid rgb(36 48 68 / 14%);
+  border-radius: 999px;
+  background: white;
+  color: var(--ink);
+  display: inline-grid;
+  place-items: center;
+  font-size: 1.2rem;
+  font-weight: 950;
+  justify-self: end;
+}
+
+.box-apples {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 3px;
+}
+
+.box-apples .share-apple {
+  max-width: 48px;
+  width: min(var(--apple-size), 46px);
+}
+
 .confetti {
   position: fixed;
   inset: 0;
@@ -974,6 +1171,84 @@ h1 {
     min-height: 28px;
     padding: 3px 8px;
     font-size: 0.82rem;
+  }
+
+  .share-game-shell {
+    width: min(100% - 16px, 560px);
+    height: calc(100vh - 92px);
+    padding-bottom: 6px;
+    grid-template-rows: auto auto minmax(76px, 0.34fr) minmax(0, 1fr) auto;
+    gap: 5px;
+  }
+
+  .share-game-topbar {
+    min-height: 58px;
+    padding: 6px 8px;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px;
+  }
+
+  .share-game-topbar .kicker {
+    display: none;
+  }
+
+  .share-game-topbar h1 {
+    font-size: clamp(1.3rem, 6vw, 1.9rem);
+  }
+
+  .share-equation {
+    min-width: 64px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: clamp(1.05rem, 5vw, 1.45rem);
+    grid-template-rows: auto 2px auto;
+  }
+
+  .share-equation span:nth-child(2) {
+    min-width: 34px;
+    height: 2px;
+  }
+
+  .share-message {
+    min-height: 28px;
+    padding: 3px 8px;
+    font-size: 0.82rem;
+  }
+
+  .apple-pool {
+    padding: 5px;
+    gap: 0 4px;
+  }
+
+  .share-apple {
+    width: calc(var(--apple-size) * 0.68);
+    max-width: 52px;
+  }
+
+  .children-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .child-station {
+    padding: 5px;
+    grid-template-rows: minmax(0, 0.86fr) minmax(70px, 0.9fr);
+    gap: 4px;
+  }
+
+  .apple-box {
+    padding: 4px;
+    border-radius: 10px;
+  }
+
+  .apple-count {
+    min-width: 28px;
+    min-height: 24px;
+    font-size: 0.95rem;
+  }
+
+  .box-apples .share-apple {
+    width: min(calc(var(--apple-size) * 0.5), 34px);
   }
 
   .game-topbar {

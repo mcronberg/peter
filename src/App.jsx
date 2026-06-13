@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Component, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Apple,
   Armchair,
@@ -68,6 +68,33 @@ const languageFlags = {
   en: '🇬🇧',
   de: '🇩🇪',
 }
+const appleProblems = [
+  { apples: 4, children: 2 },
+  { apples: 4, children: 4 },
+  { apples: 6, children: 2 },
+  { apples: 6, children: 3 },
+  { apples: 8, children: 2 },
+  { apples: 8, children: 4 },
+  { apples: 9, children: 3 },
+  { apples: 10, children: 2 },
+]
+const characterImages = ['dreng1.png', 'dreng2.png', 'dreng3.png', 'pige1.png', 'pige2.png', 'pige3.png']
+const appleLooks = [
+  { size: 58, rotate: -10 },
+  { size: 72, rotate: 8 },
+  { size: 52, rotate: 15 },
+  { size: 66, rotate: -5 },
+  { size: 60, rotate: 12 },
+  { size: 78, rotate: -14 },
+  { size: 55, rotate: 4 },
+  { size: 70, rotate: -8 },
+  { size: 64, rotate: 16 },
+  { size: 74, rotate: -3 },
+]
+
+function formatAppleCount(count) {
+  return `${count} ${count === 1 ? 'æble' : 'æbler'}`
+}
 const wordItems = [
   { id: 'apple', icon: Apple, da: 'æble', en: 'apple', de: 'Apfel' },
   { id: 'dog', icon: Dog, da: 'hund', en: 'dog', de: 'Hund' },
@@ -101,6 +128,32 @@ const wordItems = [
   { id: 'lamp', icon: Lamp, da: 'lampe', en: 'lamp', de: 'Lampe' },
 ]
 
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { error: null }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error }
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <main className="page-shell">
+          <section className="about-panel">
+            <h1>Der skete en fejl</h1>
+            <p>{this.state.error.message}</p>
+          </section>
+        </main>
+      )
+    }
+
+    return this.props.children
+  }
+}
+
 function shuffle(items) {
   const next = [...items]
   for (let index = next.length - 1; index > 0; index -= 1) {
@@ -128,6 +181,25 @@ function createTenFriendTiles() {
       })),
     ),
   )
+}
+
+function createAppleRound() {
+  const problem = shuffle(appleProblems)[0]
+  const children = shuffle(characterImages).slice(0, problem.children).map((image, index) => ({
+    id: `child-${index}`,
+    image,
+  }))
+  const apples = Array.from({ length: problem.apples }, (_, index) => ({
+    id: `apple-${index}`,
+    look: appleLooks[index % appleLooks.length],
+  }))
+
+  return {
+    ...problem,
+    target: problem.apples / problem.children,
+    children,
+    apples,
+  }
 }
 
 function playTone(kind, enabled) {
@@ -174,7 +246,7 @@ function useCurrentView() {
   }, [])
 
   if (view.startsWith('ord-match')) return 'ord-match'
-  return ['om', 'tier-venner'].includes(view) ? view : 'hjem'
+  return ['om', 'tier-venner', 'fordel-aebler'].includes(view) ? view : 'hjem'
 }
 
 function useWordMatchLanguage() {
@@ -284,6 +356,14 @@ function Home() {
             href: '#tier-venner',
             icon: '10',
           },
+          {
+            title: 'Fordel æbler',
+            subject: 'Division',
+            description: 'Fordel æblerne ligeligt mellem børnene.',
+            accent: 'tile-apples',
+            href: '#fordel-aebler',
+            icon: '🍎',
+          },
         ],
       },
       {
@@ -345,6 +425,213 @@ function Home() {
           ))}
         </div>
       </section>
+    </main>
+  )
+}
+
+function AppleImage({ apple, className = '', selected = false }) {
+  return (
+    <img
+      className={`share-apple ${selected ? 'selected' : ''} ${className}`}
+      src={`${import.meta.env.BASE_URL}images/objects/aeble.png`}
+      alt="Æble"
+      draggable={false}
+      style={{
+        '--apple-size': `${apple.look.size}px`,
+        '--apple-rotate': `${apple.look.rotate}deg`,
+      }}
+    />
+  )
+}
+
+function ShareApplesGame() {
+  const [round, setRound] = useState(() => createAppleRound())
+  const [placements, setPlacements] = useState({})
+  const [selectedAppleId, setSelectedAppleId] = useState(null)
+  const [message, setMessage] = useState('Fordel æblerne, så alle får lige mange.')
+  const [draggedAppleId, setDraggedAppleId] = useState(null)
+  const isComplete =
+    round.apples.every((apple) => placements[apple.id] !== undefined) &&
+    round.children.every((child, index) => round.apples.filter((apple) => placements[apple.id] === index).length === round.target)
+
+  useEffect(() => {
+    if (isComplete) {
+      setMessage(`Flot. Alle fik ${formatAppleCount(round.target)}.`)
+      playTone('finish', true)
+    }
+  }, [isComplete, round.target])
+
+  const resetRound = () => {
+    setRound(createAppleRound())
+    setPlacements({})
+    setSelectedAppleId(null)
+    setDraggedAppleId(null)
+    setMessage('Ny runde. Fordel æblerne ligeligt.')
+  }
+
+  const moveApple = (appleId, childIndex) => {
+    setPlacements((current) => {
+      const next = { ...current }
+      if (childIndex === null) {
+        delete next[appleId]
+      } else {
+        next[appleId] = childIndex
+      }
+      return next
+    })
+    setSelectedAppleId(null)
+    playTone('tap', true)
+  }
+
+  const handleAppleClick = (appleId) => {
+    setSelectedAppleId((current) => (current === appleId ? null : appleId))
+    setMessage('Vælg en kasse til æblet.')
+  }
+
+  const handleDrop = (event, childIndex) => {
+    event.preventDefault()
+    const appleId = event.dataTransfer.getData('text/plain') || draggedAppleId
+    if (appleId) moveApple(appleId, childIndex)
+    setDraggedAppleId(null)
+  }
+
+  const poolApples = round.apples.filter((apple) => placements[apple.id] === undefined)
+
+  return (
+    <main className="share-game-shell">
+      <section className="share-game-topbar">
+        <div>
+          <p className="kicker">Division</p>
+          <h1>Fordel æbler</h1>
+        </div>
+        <div className="share-equation" aria-label={`${round.apples.length} divideret med ${round.children.length}`}>
+          <span>{round.apples.length}</span>
+          <span aria-hidden="true" />
+          <span>{round.children.length}</span>
+        </div>
+        <button type="button" className="icon-button" onClick={resetRound}>
+          Ny runde
+        </button>
+      </section>
+
+      <p className="share-message" aria-live="polite">
+        {isComplete ? `Sådan. Alle fik ${formatAppleCount(round.target)}.` : 'Hvordan vil du fordele?'}
+      </p>
+
+      <section
+        className={`apple-pool ${selectedAppleId && placements[selectedAppleId] !== undefined ? 'ready' : ''}`}
+        onClick={() => selectedAppleId && moveApple(selectedAppleId, null)}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => handleDrop(event, null)}
+        aria-label="Æbler der ikke er fordelt"
+      >
+        {poolApples.map((apple) => (
+          <button
+            type="button"
+            className="apple-button"
+            data-apple-id={apple.id}
+            draggable
+            key={apple.id}
+            onClick={(event) => {
+              event.stopPropagation()
+              handleAppleClick(apple.id)
+            }}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', apple.id)
+              setDraggedAppleId(apple.id)
+            }}
+            onDragEnd={() => setDraggedAppleId(null)}
+          >
+            <AppleImage apple={apple} selected={selectedAppleId === apple.id} />
+          </button>
+        ))}
+      </section>
+
+      <section className="children-board" aria-label="Børn og æblekasser">
+        {round.children.map((child, childIndex) => {
+          const childApples = round.apples.filter((apple) => placements[apple.id] === childIndex)
+          return (
+            <article className="child-station" key={child.id}>
+              <img className="child-picture" src={`${import.meta.env.BASE_URL}images/characters/${child.image}`} alt="Barn" />
+              <div
+                role="button"
+                tabIndex={0}
+                className={`apple-box ${selectedAppleId ? 'ready' : ''}`}
+                data-child-index={childIndex}
+                onClick={() => selectedAppleId && moveApple(selectedAppleId, childIndex)}
+                onKeyDown={(event) => {
+                  if ((event.key === 'Enter' || event.key === ' ') && selectedAppleId) {
+                    event.preventDefault()
+                    moveApple(selectedAppleId, childIndex)
+                  }
+                }}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => handleDrop(event, childIndex)}
+                aria-label={`Kasse ${childIndex + 1} med ${childApples.length} æbler`}
+              >
+                <span className="apple-count">{childApples.length}</span>
+                <div className="box-apples">
+                  {childApples.map((apple) => (
+                    <button
+                      type="button"
+                      className="boxed-apple-button"
+                      data-apple-id={apple.id}
+                      draggable
+                      key={apple.id}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        if (selectedAppleId && selectedAppleId !== apple.id) {
+                          moveApple(selectedAppleId, childIndex)
+                        } else {
+                          handleAppleClick(apple.id)
+                        }
+                      }}
+                      onDragStart={(event) => {
+                        event.dataTransfer.setData('text/plain', apple.id)
+                        setDraggedAppleId(apple.id)
+                      }}
+                      onDragEnd={() => setDraggedAppleId(null)}
+                    >
+                      <AppleImage apple={apple} selected={selectedAppleId === apple.id} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </article>
+          )
+        })}
+      </section>
+
+      <p className="share-message lower" aria-live="polite">
+        {message}
+      </p>
+
+      {isComplete && (
+        <>
+          <div className="confetti" aria-hidden="true">
+            {confettiPieces.map((piece) => (
+              <span
+                className={`confetti-piece ${piece.shape}`}
+                key={piece.id}
+                style={{
+                  '--confetti-left': piece.left,
+                  '--confetti-delay': piece.delay,
+                  '--confetti-duration': piece.duration,
+                  '--confetti-drift': piece.drift,
+                  '--confetti-color': piece.color,
+                }}
+              />
+            ))}
+          </div>
+          <section className="finish-panel" aria-live="polite">
+            <h2>Godt fordelt</h2>
+            <p>Alle børn fik lige mange æbler.</p>
+            <button type="button" onClick={resetRound}>
+              Spil igen
+            </button>
+          </section>
+        </>
+      )}
     </main>
   )
 }
@@ -780,10 +1067,12 @@ export default function App() {
   const latestVersion = useVersionNotice()
 
   return (
-    <div className={`app ${view === 'tier-venner' || view === 'ord-match' ? 'game-app' : ''}`}>
+    <div className={`app ${view === 'tier-venner' || view === 'ord-match' || view === 'fordel-aebler' ? 'game-app' : ''}`}>
       <Header view={view} />
       <VersionNotice latestVersion={latestVersion} />
-      {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame initialLanguage={wordMatchLanguage} /> : <Home />}
+      <ErrorBoundary key={view}>
+        {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame initialLanguage={wordMatchLanguage} /> : view === 'fordel-aebler' ? <ShareApplesGame /> : <Home />}
+      </ErrorBoundary>
       <Footer />
     </div>
   )
