@@ -36,6 +36,7 @@
 - Tal-aktivitet: `Byg rækker`, et begynderspil til gange hvor elever bygger 2-5 rækker med lige mange frugter i hver række.
 - Sprog-aktivitet: `Ord-match`, et sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner. Forsiden skal kunne starte spillet direkte på dansk, engelsk eller tysk med tekst og flag.
 - Natur-aktivitet: `Solformørkelse`, en interaktiv forklaring hvor eleven trækker Månen foran Solen. Himlen bliver gradvist mørkere, Solen får en segl-form, og ved fuld dækning ses koronaen. Hele scenen er tegnet i ren SVG/CSS (ingen billed-assets).
+- Natur-aktivitet: `Byg en plante`, hvor eleven trækker plantens dele (rod, stængel, kimblad, blad, blomst) op på de rigtige pladser nedefra og op. Et par bier summer rundt i baggrunden. Ren SVG/CSS, ingen billed-assets.
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
 
@@ -78,6 +79,7 @@ Når versionen ændres, opdater `version` i `package.json`.
 - `Byg rækker` skal kunne bruges med både drag/drop og tryk-for-at-flytte, og skal passe på én skærm på desktop og telefon.
 - `Ord-match` skal passe på én skærm uden scrollbar på både desktop og telefon. På telefon bruges primært tryk-for-at-matche i stedet for drag/drop.
 - `Solformørkelse` skal passe på én skærm uden scrollbar. Månen styres med mus, touch (pointer events) og piletaster, og der er en `Kør formørkelsen`-knap til klassens skærm. Hold scenen i ren SVG/CSS.
+- `Byg en plante` skal passe på én skærm uden scrollbar. Delene placeres med drag/drop og tryk-for-at-flytte, og pladserne kan også bruges med tastatur. Afslutningen er rolig (ingen `Celebration`): planten vugger blidt, og en ekstra bi kommer til.
 - I `Ord-match` skal klik på ord eller ikon oplæse ordet på det valgte sprog, men samme ord må ikke oplæses to gange i træk.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
 - Brug den fælles `Celebration`-komponent til succes/afslutning i spil. Den vælger tilfældigt mellem flere festlige animationer.

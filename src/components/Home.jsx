@@ -11,6 +11,21 @@ function EclipseTileIcon() {
   )
 }
 
+// Lille plante-ikon: stængel, blad og blomst.
+function PlantTileIcon() {
+  return (
+    <svg className="tile-plant-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12,22 C11,16 13,11 12,6" fill="none" stroke="#3c9d4e" strokeWidth="2.4" strokeLinecap="round" />
+      <ellipse cx="7" cy="14" rx="4.2" ry="2.2" transform="rotate(-28 7 14)" fill="#3fae5a" />
+      <circle cx="12" cy="5" r="2.4" fill="#ffd23f" />
+      <circle cx="9" cy="5" r="2.2" fill="#ff7eb6" />
+      <circle cx="15" cy="5" r="2.2" fill="#ff7eb6" />
+      <circle cx="12" cy="2.6" r="2.2" fill="#ff7eb6" />
+      <circle cx="12" cy="7.4" r="2.2" fill="#ff7eb6" />
+    </svg>
+  )
+}
+
 // Forsiden: kategoriserede tiles for de rigtige aktiviteter (ingen "kommer snart"-kort).
 export function Home() {
   const categories = useMemo(
@@ -83,6 +98,14 @@ export function Home() {
             accent: 'tile-eclipse',
             href: '#solformoerkelse',
             icon: <EclipseTileIcon />,
+          },
+          {
+            title: 'Byg en plante',
+            subject: 'Planter',
+            description: 'Sæt rod, stængel, blade og blomst på plads.',
+            accent: 'tile-plant',
+            href: '#byg-plante',
+            icon: <PlantTileIcon />,
           },
         ],
       },

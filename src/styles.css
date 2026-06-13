@@ -331,6 +331,15 @@ h1 {
   height: 46px;
 }
 
+.tile-plant {
+  background: linear-gradient(150deg, #bfeaff 0%, #d6f5c4 50%, #79c97a 100%);
+}
+
+.tile-plant-icon {
+  width: 44px;
+  height: 44px;
+}
+
 .activity-tile:hover {
   box-shadow: 0 16px 34px rgb(36 48 68 / 17%);
   transform: translate(-2px, -2px);
@@ -1047,6 +1056,318 @@ h1 {
   gap: 10px;
 }
 
+/* Byg en plante */
+.plant-game-shell {
+  width: min(1120px, calc(100% - 24px));
+  height: calc(100vh - 104px);
+  min-height: 0;
+  margin: 0 auto;
+  padding: 0 0 8px;
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+}
+
+.plant-topbar {
+  min-height: 78px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 2px solid rgb(36 48 68 / 12%);
+  border-radius: 16px;
+  background: rgb(255 254 248 / 86%);
+  box-shadow: 0 10px 24px rgb(36 48 68 / 10%);
+}
+
+.plant-topbar h1 {
+  margin: 0;
+  color: #2f9247;
+  font-size: clamp(1.8rem, 1.25rem + 2vw, 3.2rem);
+  line-height: 0.9;
+}
+
+.plant-stage {
+  position: relative;
+  justify-self: center;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: 100 / 60;
+  max-width: 100%;
+  border: 2px solid rgb(36 48 68 / 14%);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgb(36 48 68 / 14%);
+}
+
+.plant-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.plant-sway {
+  transform-box: view-box;
+  transform-origin: 50px 46px;
+}
+
+.plant-stage.complete .plant-sway {
+  animation: plant-sway 4.5s ease-in-out infinite;
+}
+
+@keyframes plant-sway {
+  0%,
+  100% {
+    transform: rotate(-1.6deg);
+  }
+  50% {
+    transform: rotate(1.6deg);
+  }
+}
+
+.plant-slot {
+  cursor: pointer;
+  outline: none;
+}
+
+.plant-slot-hit {
+  pointer-events: all;
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 0.6;
+  stroke-dasharray: 2 1.6;
+  transition: fill 0.15s, stroke 0.15s;
+}
+
+.plant-slot.ready .plant-slot-hit {
+  fill: rgb(63 174 90 / 12%);
+  stroke: rgb(63 174 90 / 70%);
+}
+
+.plant-slot:hover .plant-slot-hit,
+.plant-slot:focus-visible .plant-slot-hit {
+  fill: rgb(63 174 90 / 22%);
+  stroke: #3fae5a;
+}
+
+.plant-slot-text {
+  pointer-events: none;
+  fill: #27502f;
+  font-weight: 800;
+  font-size: 3.4px;
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-width: 0.9;
+  stroke-linejoin: round;
+}
+
+.plant-decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.insect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.insect svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Langsomme, bløde flyveruter rundt i scenen – hver sin bane. */
+.fly-a {
+  animation-name: fly-a;
+}
+.fly-b {
+  animation-name: fly-b;
+}
+.fly-c {
+  animation-name: fly-c;
+}
+.fly-d {
+  animation-name: fly-d;
+}
+
+@keyframes fly-a {
+  0% { left: 10%; top: 30%; }
+  25% { left: 34%; top: 16%; }
+  50% { left: 58%; top: 34%; }
+  75% { left: 32%; top: 50%; }
+  100% { left: 10%; top: 30%; }
+}
+
+@keyframes fly-b {
+  0% { left: 84%; top: 46%; }
+  25% { left: 66%; top: 62%; }
+  50% { left: 82%; top: 74%; }
+  75% { left: 92%; top: 54%; }
+  100% { left: 84%; top: 46%; }
+}
+
+@keyframes fly-c {
+  0% { left: 72%; top: 14%; }
+  30% { left: 52%; top: 8%; }
+  55% { left: 80%; top: 24%; }
+  80% { left: 88%; top: 10%; }
+  100% { left: 72%; top: 14%; }
+}
+
+@keyframes fly-d {
+  0% { left: 18%; top: 60%; }
+  25% { left: 36%; top: 72%; }
+  50% { left: 12%; top: 80%; }
+  75% { left: 30%; top: 58%; }
+  100% { left: 18%; top: 60%; }
+}
+
+/* Biens vinger basker hurtigt. */
+.bee-wings {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: bee-flap 0.18s ease-in-out infinite alternate;
+}
+
+@keyframes bee-flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+/* Sommerfuglens vinger slår langsomt sammen mod kroppen. */
+.bfly-wing {
+  transform-box: fill-box;
+  animation: bfly-flap 0.85s ease-in-out infinite alternate;
+}
+
+.bfly-left {
+  transform-origin: 100% 50%;
+}
+
+.bfly-right {
+  transform-origin: 0% 50%;
+}
+
+@keyframes bfly-flap {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .insect,
+  .bee-wings,
+  .bfly-wing {
+    animation: none;
+  }
+}
+
+.plant-tray {
+  min-height: 0;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border: 2px solid rgb(36 48 68 / 12%);
+  border-radius: 16px;
+  background: rgb(255 254 248 / 86%);
+  box-shadow: 0 10px 24px rgb(36 48 68 / 10%);
+}
+
+.plant-part-button {
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border: 2px solid rgb(36 48 68 / 14%);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 900;
+  font-size: 0.95rem;
+  cursor: grab;
+  box-shadow: 0 6px 14px rgb(36 48 68 / 10%);
+}
+
+.plant-part-button .part-icon {
+  width: clamp(40px, 6vw, 58px);
+  height: clamp(40px, 6vw, 58px);
+}
+
+.plant-part-button:hover {
+  transform: translate(-1px, -1px);
+}
+
+.plant-part-button.selected {
+  border-color: #3fae5a;
+  background: #eafbe4;
+  box-shadow: 0 8px 18px rgb(63 174 90 / 28%);
+}
+
+.plant-tray-done {
+  margin: 0;
+  color: #2f9247;
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.plant-palette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 2px solid rgb(36 48 68 / 12%);
+  border-radius: 16px;
+  background: rgb(255 254 248 / 86%);
+  box-shadow: 0 8px 18px rgb(36 48 68 / 9%);
+}
+
+.plant-palette-label {
+  margin-right: 4px;
+  color: #5b2d9b;
+  font-weight: 900;
+  font-size: 0.92rem;
+}
+
+.plant-swatch {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid rgb(255 255 255 / 90%);
+  border-radius: 50%;
+  background: var(--swatch);
+  box-shadow: 0 2px 6px rgb(36 48 68 / 22%);
+  cursor: pointer;
+}
+
+.plant-swatch:hover {
+  transform: translateY(-1px);
+}
+
+.plant-swatch.selected {
+  outline: 3px solid #2f9247;
+  outline-offset: 2px;
+}
+
 .fruit-pool {
   background:
     linear-gradient(135deg, rgb(255 240 168 / 78%), rgb(227 255 240 / 82%)),
@@ -1513,6 +1834,53 @@ h1 {
 
   .eclipse-topbar h1 {
     font-size: clamp(1.3rem, 6vw, 1.9rem);
+  }
+
+  .plant-game-shell {
+    width: min(100% - 16px, 560px);
+    height: calc(100vh - 92px);
+    padding-bottom: 6px;
+    gap: 5px;
+  }
+
+  .plant-topbar {
+    min-height: 58px;
+    padding: 6px 10px;
+  }
+
+  .plant-topbar .kicker {
+    display: none;
+  }
+
+  .plant-topbar h1 {
+    font-size: clamp(1.3rem, 6vw, 1.9rem);
+  }
+
+  .plant-tray {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .plant-part-button {
+    padding: 4px 7px;
+    font-size: 0.78rem;
+  }
+
+  .plant-palette {
+    padding: 4px 8px;
+    gap: 6px;
+  }
+
+  .plant-palette-label {
+    width: 100%;
+    text-align: center;
+    margin-right: 0;
+    font-size: 0.78rem;
+  }
+
+  .plant-swatch {
+    width: 26px;
+    height: 26px;
   }
 
   .share-game-topbar,
