@@ -915,7 +915,7 @@ h1 {
   height: auto;
   display: block;
   filter: drop-shadow(0 10px 12px rgb(36 48 68 / 18%));
-  transform: rotate(var(--apple-rotate));
+  transform: scaleX(var(--apple-flip)) rotate(var(--apple-rotate));
   transition:
     transform 120ms ease,
     filter 120ms ease;
@@ -927,7 +927,7 @@ h1 {
   filter:
     drop-shadow(0 0 0 #2f80ed)
     drop-shadow(0 12px 12px rgb(36 48 68 / 20%));
-  transform: rotate(var(--apple-rotate)) scale(1.14);
+  transform: scaleX(var(--apple-flip)) rotate(var(--apple-rotate)) scale(1.14);
 }
 
 .children-board {
@@ -952,6 +952,7 @@ h1 {
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 12px 14px rgb(36 48 68 / 16%));
+  transform: scaleX(var(--child-flip));
 }
 
 .apple-box {
@@ -997,7 +998,7 @@ h1 {
   width: min(var(--apple-size), 46px);
 }
 
-.confetti {
+.celebration {
   position: fixed;
   inset: 0;
   z-index: 1;
@@ -1050,6 +1051,111 @@ h1 {
   100% {
     opacity: 0;
     transform: translate3d(var(--confetti-drift), 105vh, 0) rotate(720deg);
+  }
+}
+
+.sparkle-piece {
+  width: var(--sparkle-size);
+  height: var(--sparkle-size);
+  position: absolute;
+  left: var(--sparkle-left);
+  top: var(--sparkle-top);
+  color: var(--sparkle-color);
+  opacity: 0;
+  transform: scale(0) rotate(0deg);
+  animation: sparkle-pop 1.45s var(--sparkle-delay) ease-out forwards;
+}
+
+.sparkle-piece::before,
+.sparkle-piece::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  clip-path: polygon(50% 0, 61% 34%, 98% 35%, 68% 56%, 79% 91%, 50% 70%, 21% 91%, 32% 56%, 2% 35%, 39% 34%);
+}
+
+.sparkle-piece::after {
+  filter: blur(8px);
+  opacity: 0.45;
+}
+
+.balloon-piece {
+  width: 38px;
+  height: 48px;
+  position: absolute;
+  left: var(--balloon-left);
+  bottom: -72px;
+  border: 2px solid rgb(36 48 68 / 22%);
+  border-radius: 50% 50% 46% 46%;
+  background: var(--balloon-color);
+  box-shadow: inset -8px -10px 0 rgb(36 48 68 / 10%);
+  animation: balloon-rise var(--balloon-duration) var(--balloon-delay) ease-out forwards;
+}
+
+.balloon-piece::before {
+  content: "";
+  width: 10px;
+  height: 8px;
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  background: inherit;
+  border: 2px solid rgb(36 48 68 / 20%);
+  border-top: 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.balloon-piece::after {
+  content: "";
+  width: 2px;
+  height: 56px;
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  background: rgb(36 48 68 / 22%);
+  transform: translateX(-50%);
+}
+
+@keyframes sparkle-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+
+  22% {
+    opacity: 1;
+    transform: scale(1.25) rotate(120deg);
+  }
+
+  68% {
+    opacity: 1;
+    transform: scale(0.92) rotate(250deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(360deg);
+  }
+}
+
+@keyframes balloon-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(18px, -112vh, 0) rotate(8deg);
   }
 }
 

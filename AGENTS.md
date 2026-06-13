@@ -61,6 +61,7 @@ Når versionen ændres, opdater `version` i `package.json`.
 - `Ord-match` skal passe på én skærm uden scrollbar på både desktop og telefon. På telefon bruges primært tryk-for-at-matche i stedet for drag/drop.
 - I `Ord-match` skal klik på ord eller ikon oplæse ordet på det valgte sprog, men samme ord må ikke oplæses to gange i træk.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
+- Brug den fælles `Celebration`-komponent til succes/afslutning i spil. Den vælger tilfældigt mellem flere festlige animationer.
 - Bevar dansk tekst og den venlige skole-tone.
 - Kør `npm run build` før en ændring betragtes som færdig.
 - Ved frontendændringer bør appen åbnes lokalt og tjekkes visuelt på desktop og en mobilbredde.

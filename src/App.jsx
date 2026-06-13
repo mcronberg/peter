@@ -53,6 +53,22 @@ const confettiPieces = Array.from({ length: 42 }, (_, index) => ({
   color: ['#ff5c8a', '#ffd166', '#24c6dc', '#62e58d', '#9448ff', '#ff9f1c'][index % 6],
   shape: index % 3 === 0 ? 'round' : index % 3 === 1 ? 'wide' : 'tall',
 }))
+const sparklePieces = Array.from({ length: 28 }, (_, index) => ({
+  id: index,
+  left: `${8 + ((index * 31) % 84)}%`,
+  top: `${10 + ((index * 17) % 70)}%`,
+  delay: `${(index % 8) * 0.09}s`,
+  size: `${18 + (index % 5) * 8}px`,
+  color: ['#ffd166', '#ff5c8a', '#41c6f2', '#60d394', '#9448ff'][index % 5],
+}))
+const balloonPieces = Array.from({ length: 12 }, (_, index) => ({
+  id: index,
+  left: `${5 + ((index * 37) % 90)}%`,
+  delay: `${(index % 6) * 0.16}s`,
+  duration: `${2.6 + (index % 4) * 0.32}s`,
+  color: ['#ff5c8a', '#ffd166', '#41c6f2', '#60d394', '#9448ff', '#ff9f1c'][index % 6],
+}))
+const celebrationVariants = ['confetti', 'sparkles', 'balloons']
 const speechLocales = {
   da: 'da-DK',
   en: 'en-US',
@@ -78,7 +94,7 @@ const appleProblems = [
   { apples: 9, children: 3 },
   { apples: 10, children: 2 },
 ]
-const characterImages = ['dreng1.png', 'dreng2.png', 'dreng3.png', 'pige1.png', 'pige2.png', 'pige3.png']
+const characterImages = ['dreng4.png', 'pige4.png', 'dreng5.png', 'pige5.png']
 const appleLooks = [
   { size: 58, rotate: -10 },
   { size: 72, rotate: 8 },
@@ -94,6 +110,67 @@ const appleLooks = [
 
 function formatAppleCount(count) {
   return `${count} ${count === 1 ? 'æble' : 'æbler'}`
+}
+
+function Celebration() {
+  const variant = useMemo(() => celebrationVariants[Math.floor(Math.random() * celebrationVariants.length)], [])
+
+  if (variant === 'sparkles') {
+    return (
+      <div className="celebration celebration-sparkles" aria-hidden="true">
+        {sparklePieces.map((piece) => (
+          <span
+            className="sparkle-piece"
+            key={piece.id}
+            style={{
+              '--sparkle-left': piece.left,
+              '--sparkle-top': piece.top,
+              '--sparkle-delay': piece.delay,
+              '--sparkle-size': piece.size,
+              '--sparkle-color': piece.color,
+            }}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  if (variant === 'balloons') {
+    return (
+      <div className="celebration celebration-balloons" aria-hidden="true">
+        {balloonPieces.map((piece) => (
+          <span
+            className="balloon-piece"
+            key={piece.id}
+            style={{
+              '--balloon-left': piece.left,
+              '--balloon-delay': piece.delay,
+              '--balloon-duration': piece.duration,
+              '--balloon-color': piece.color,
+            }}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <div className="celebration confetti" aria-hidden="true">
+      {confettiPieces.map((piece) => (
+        <span
+          className={`confetti-piece ${piece.shape}`}
+          key={piece.id}
+          style={{
+            '--confetti-left': piece.left,
+            '--confetti-delay': piece.delay,
+            '--confetti-duration': piece.duration,
+            '--confetti-drift': piece.drift,
+            '--confetti-color': piece.color,
+          }}
+        />
+      ))}
+    </div>
+  )
 }
 const wordItems = [
   { id: 'apple', icon: Apple, da: 'æble', en: 'apple', de: 'Apfel' },
@@ -188,10 +265,14 @@ function createAppleRound() {
   const children = shuffle(characterImages).slice(0, problem.children).map((image, index) => ({
     id: `child-${index}`,
     image,
+    flipped: Math.random() > 0.5,
   }))
   const apples = Array.from({ length: problem.apples }, (_, index) => ({
     id: `apple-${index}`,
-    look: appleLooks[index % appleLooks.length],
+    look: {
+      ...appleLooks[index % appleLooks.length],
+      flipped: Math.random() > 0.5,
+    },
   }))
 
   return {
@@ -371,23 +452,23 @@ function Home() {
         tiles: [
           {
             title: 'Ord-match',
-            subject: 'Dansk',
+            subject: `${languageFlags.da} Dansk`,
             description: 'Match ord og ikoner på dansk.',
             accent: 'tile-words',
             href: '#ord-match-da',
             icon: languageFlags.da,
           },
           {
-            title: 'Word match',
-            subject: 'Engelsk',
+            title: 'Ord-match',
+            subject: `${languageFlags.en} Engelsk`,
             description: 'Match words and icons in English.',
             accent: 'tile-words',
             href: '#ord-match-en',
             icon: languageFlags.en,
           },
           {
-            title: 'Wort-Match',
-            subject: 'Tysk',
+            title: 'Ord-match',
+            subject: `${languageFlags.de} Tysk`,
             description: 'Match ord og ikoner på tysk.',
             accent: 'tile-words',
             href: '#ord-match-de',
@@ -439,6 +520,7 @@ function AppleImage({ apple, className = '', selected = false }) {
       style={{
         '--apple-size': `${apple.look.size}px`,
         '--apple-rotate': `${apple.look.rotate}deg`,
+        '--apple-flip': apple.look.flipped ? -1 : 1,
       }}
     />
   )
@@ -552,7 +634,12 @@ function ShareApplesGame() {
           const childApples = round.apples.filter((apple) => placements[apple.id] === childIndex)
           return (
             <article className="child-station" key={child.id}>
-              <img className="child-picture" src={`${import.meta.env.BASE_URL}images/characters/${child.image}`} alt="Barn" />
+              <img
+                className="child-picture"
+                src={`${import.meta.env.BASE_URL}images/characters/${child.image}`}
+                alt="Barn"
+                style={{ '--child-flip': child.flipped ? -1 : 1 }}
+              />
               <div
                 role="button"
                 tabIndex={0}
@@ -608,21 +695,7 @@ function ShareApplesGame() {
 
       {isComplete && (
         <>
-          <div className="confetti" aria-hidden="true">
-            {confettiPieces.map((piece) => (
-              <span
-                className={`confetti-piece ${piece.shape}`}
-                key={piece.id}
-                style={{
-                  '--confetti-left': piece.left,
-                  '--confetti-delay': piece.delay,
-                  '--confetti-duration': piece.duration,
-                  '--confetti-drift': piece.drift,
-                  '--confetti-color': piece.color,
-                }}
-              />
-            ))}
-          </div>
+          <Celebration />
           <section className="finish-panel" aria-live="polite">
             <h2>Godt fordelt</h2>
             <p>Alle børn fik lige mange æbler.</p>
@@ -822,21 +895,7 @@ function WordMatchGame({ initialLanguage }) {
 
         {isComplete && (
           <>
-            <div className="confetti" aria-hidden="true">
-              {confettiPieces.map((piece) => (
-                <span
-                  className={`confetti-piece ${piece.shape}`}
-                  key={piece.id}
-                  style={{
-                    '--confetti-left': piece.left,
-                    '--confetti-delay': piece.delay,
-                    '--confetti-duration': piece.duration,
-                    '--confetti-drift': piece.drift,
-                    '--confetti-color': piece.color,
-                  }}
-                />
-              ))}
-            </div>
+            <Celebration />
             <section className="finish-panel" aria-live="polite">
               <h2>Godt matchet</h2>
               <p>Alle 10 ord og ikoner passer sammen.</p>
@@ -1007,21 +1066,7 @@ function TenFriendsGame() {
 
       {isComplete && (
         <>
-          <div className="confetti" aria-hidden="true">
-            {confettiPieces.map((piece) => (
-              <span
-                className={`confetti-piece ${piece.shape}`}
-                key={piece.id}
-                style={{
-                  '--confetti-left': piece.left,
-                  '--confetti-delay': piece.delay,
-                  '--confetti-duration': piece.duration,
-                  '--confetti-drift': piece.drift,
-                  '--confetti-color': piece.color,
-                }}
-              />
-            ))}
-          </div>
+          <Celebration />
           <section className="finish-panel" aria-live="polite">
             <h2>Flot fundet</h2>
             <p>Alle tal er væk, og alle par blev til 10.</p>
