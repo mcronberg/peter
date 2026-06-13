@@ -79,10 +79,45 @@ const languageLabels = {
   en: 'Engelsk',
   de: 'Tysk',
 }
-const languageFlags = {
-  da: '🇩🇰',
-  en: '🇬🇧',
-  de: '🇩🇪',
+function DanishFlag({ className = 'tile-flag' }) {
+  return (
+    <svg className={className} viewBox="0 0 37 28" aria-hidden="true">
+      <rect width="37" height="28" fill="#c8102e" />
+      <rect x="12" width="4" height="28" fill="#fff" />
+      <rect y="12" width="37" height="4" fill="#fff" />
+    </svg>
+  )
+}
+
+function GermanFlag({ className = 'tile-flag' }) {
+  return (
+    <svg className={className} viewBox="0 0 5 3" aria-hidden="true">
+      <rect width="5" height="3" fill="#ffce00" />
+      <rect width="5" height="2" fill="#dd0000" />
+      <rect width="5" height="1" fill="#000" />
+    </svg>
+  )
+}
+
+function BritishFlag({ className = 'tile-flag' }) {
+  return (
+    <svg className={className} viewBox="0 0 60 30" aria-hidden="true">
+      <clipPath id="uk-union-clip">
+        <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
+      </clipPath>
+      <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" fill="none" />
+      <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#uk-union-clip)" stroke="#c8102e" strokeWidth="4" fill="none" />
+      <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" fill="none" />
+      <path d="M30,0 v30 M0,15 h60" stroke="#c8102e" strokeWidth="6" fill="none" />
+    </svg>
+  )
+}
+
+const languageFlagComponents = {
+  da: DanishFlag,
+  en: BritishFlag,
+  de: GermanFlag,
 }
 const appleProblems = [
   { apples: 4, children: 2 },
@@ -93,6 +128,26 @@ const appleProblems = [
   { apples: 8, children: 4 },
   { apples: 9, children: 3 },
   { apples: 10, children: 2 },
+]
+const fruitImages = [
+  'aeble.png',
+  'appelsin.png',
+  'banan.png',
+  'paere.png',
+  'jordbaer.png',
+  'blaabaer.png',
+]
+const multiplyProblems = [
+  { rows: 2, perRow: 2 },
+  { rows: 2, perRow: 3 },
+  { rows: 2, perRow: 4 },
+  { rows: 2, perRow: 5 },
+  { rows: 3, perRow: 2 },
+  { rows: 3, perRow: 3 },
+  { rows: 3, perRow: 4 },
+  { rows: 4, perRow: 2 },
+  { rows: 4, perRow: 3 },
+  { rows: 5, perRow: 2 },
 ]
 const characterImages = ['dreng4.png', 'pige4.png', 'dreng5.png', 'pige5.png']
 const appleLooks = [
@@ -283,6 +338,24 @@ function createAppleRound() {
   }
 }
 
+function createMultiplyRound() {
+  const problem = shuffle(multiplyProblems)[0]
+  const fruit = shuffle(fruitImages)[0]
+  const total = problem.rows * problem.perRow
+  return {
+    ...problem,
+    total,
+    fruit,
+    items: Array.from({ length: total }, (_, index) => ({
+      id: `fruit-${index}`,
+      look: {
+        ...appleLooks[index % appleLooks.length],
+        flipped: Math.random() > 0.5,
+      },
+    })),
+  }
+}
+
 function playTone(kind, enabled) {
   if (!enabled) return
 
@@ -327,7 +400,7 @@ function useCurrentView() {
   }, [])
 
   if (view.startsWith('ord-match')) return 'ord-match'
-  return ['om', 'tier-venner', 'fordel-aebler'].includes(view) ? view : 'hjem'
+  return ['om', 'tier-venner', 'fordel-aebler', 'byg-raekker'].includes(view) ? view : 'hjem'
 }
 
 function useWordMatchLanguage() {
@@ -443,7 +516,15 @@ function Home() {
             description: 'Fordel æblerne ligeligt mellem børnene.',
             accent: 'tile-apples',
             href: '#fordel-aebler',
-            icon: '🍎',
+            icon: '÷',
+          },
+          {
+            title: 'Byg rækker',
+            subject: 'Gange',
+            description: 'Byg rækker med lige mange frugter.',
+            accent: 'tile-multiply',
+            href: '#byg-raekker',
+            icon: '×',
           },
         ],
       },
@@ -452,27 +533,27 @@ function Home() {
         tiles: [
           {
             title: 'Ord-match',
-            subject: `${languageFlags.da} Dansk`,
+            subject: 'Dansk',
             description: 'Match ord og ikoner på dansk.',
             accent: 'tile-words',
             href: '#ord-match-da',
-            icon: languageFlags.da,
+            icon: <DanishFlag />,
           },
           {
             title: 'Ord-match',
-            subject: `${languageFlags.en} Engelsk`,
+            subject: 'Engelsk',
             description: 'Match words and icons in English.',
             accent: 'tile-words',
             href: '#ord-match-en',
-            icon: languageFlags.en,
+            icon: <BritishFlag />,
           },
           {
             title: 'Ord-match',
-            subject: `${languageFlags.de} Tysk`,
+            subject: 'Tysk',
             description: 'Match ord og ikoner på tysk.',
             accent: 'tile-words',
             href: '#ord-match-de',
-            icon: languageFlags.de,
+            icon: <GermanFlag />,
           },
         ],
       },
@@ -523,6 +604,198 @@ function AppleImage({ apple, className = '', selected = false }) {
         '--apple-flip': apple.look.flipped ? -1 : 1,
       }}
     />
+  )
+}
+
+function FruitImage({ item, fruit, className = '', selected = false }) {
+  return (
+    <img
+      className={`share-apple ${selected ? 'selected' : ''} ${className}`}
+      src={`${import.meta.env.BASE_URL}images/objects/${fruit}`}
+      alt="Frugt"
+      draggable={false}
+      style={{
+        '--apple-size': `${item.look.size}px`,
+        '--apple-rotate': `${item.look.rotate}deg`,
+        '--apple-flip': item.look.flipped ? -1 : 1,
+      }}
+    />
+  )
+}
+
+function BuildRowsGame() {
+  const [round, setRound] = useState(() => createMultiplyRound())
+  const [placements, setPlacements] = useState({})
+  const [selectedId, setSelectedId] = useState(null)
+  const [draggedId, setDraggedId] = useState(null)
+  const [message, setMessage] = useState('Byg rækkerne med lige mange frugter.')
+  const isComplete =
+    round.items.every((item) => placements[item.id] !== undefined) &&
+    Array.from({ length: round.rows }, (_, rowIndex) => round.items.filter((item) => placements[item.id] === rowIndex).length).every((count) => count === round.perRow)
+
+  useEffect(() => {
+    if (isComplete) {
+      setMessage(`Flot. ${round.rows} × ${round.perRow} = ${round.total}.`)
+      playTone('finish', true)
+    }
+  }, [isComplete, round.rows, round.perRow, round.total])
+
+  const resetRound = () => {
+    setRound(createMultiplyRound())
+    setPlacements({})
+    setSelectedId(null)
+    setDraggedId(null)
+    setMessage('Ny runde. Byg rækkerne.')
+  }
+
+  const moveItem = (itemId, rowIndex) => {
+    setPlacements((current) => {
+      const next = { ...current }
+      if (rowIndex === null) {
+        delete next[itemId]
+      } else {
+        next[itemId] = rowIndex
+      }
+      return next
+    })
+    setSelectedId(null)
+    playTone('tap', true)
+  }
+
+  const selectItem = (itemId) => {
+    setSelectedId((current) => (current === itemId ? null : itemId))
+    setMessage('Vælg en række til frugten.')
+  }
+
+  const handleDrop = (event, rowIndex) => {
+    event.preventDefault()
+    const itemId = event.dataTransfer.getData('text/plain') || draggedId
+    if (itemId) moveItem(itemId, rowIndex)
+    setDraggedId(null)
+  }
+
+  const poolItems = round.items.filter((item) => placements[item.id] === undefined)
+
+  return (
+    <main className="multiply-game-shell">
+      <section className="multiply-topbar">
+        <div>
+          <p className="kicker">Gange</p>
+          <h1>Byg rækker</h1>
+        </div>
+        <div className="multiply-equation" aria-label={`${round.rows} gange ${round.perRow}`}>
+          {round.rows} × {round.perRow}
+        </div>
+        <button type="button" className="icon-button" onClick={resetRound}>
+          Ny runde
+        </button>
+      </section>
+
+      <p className="share-message" aria-live="polite">
+        {isComplete ? `${round.rows} × ${round.perRow} = ${round.total}` : `Byg ${round.rows} rækker med ${round.perRow} i hver.`}
+      </p>
+
+      <section
+        className={`fruit-pool ${selectedId && placements[selectedId] !== undefined ? 'ready' : ''}`}
+        onClick={() => selectedId && moveItem(selectedId, null)}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={(event) => handleDrop(event, null)}
+        aria-label="Frugter der ikke er placeret"
+      >
+        {poolItems.map((item) => (
+          <button
+            type="button"
+            className="fruit-button"
+            data-fruit-id={item.id}
+            draggable
+            key={item.id}
+            onClick={(event) => {
+              event.stopPropagation()
+              selectItem(item.id)
+            }}
+            onDragStart={(event) => {
+              event.dataTransfer.setData('text/plain', item.id)
+              setDraggedId(item.id)
+            }}
+            onDragEnd={() => setDraggedId(null)}
+          >
+            <FruitImage item={item} fruit={round.fruit} selected={selectedId === item.id} />
+          </button>
+        ))}
+      </section>
+
+      <section className="rows-board" aria-label="Rækker" style={{ '--row-count': round.rows }}>
+        {Array.from({ length: round.rows }, (_, rowIndex) => {
+          const rowItems = round.items.filter((item) => placements[item.id] === rowIndex)
+          return (
+            <div
+              className={`fruit-row ${selectedId ? 'ready' : ''} ${rowItems.length === round.perRow ? 'complete' : ''}`}
+              data-row-index={rowIndex}
+              key={rowIndex}
+              role="button"
+              tabIndex={0}
+              onClick={() => selectedId && moveItem(selectedId, rowIndex)}
+              onKeyDown={(event) => {
+                if ((event.key === 'Enter' || event.key === ' ') && selectedId) {
+                  event.preventDefault()
+                  moveItem(selectedId, rowIndex)
+                }
+              }}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => handleDrop(event, rowIndex)}
+              aria-label={`Række ${rowIndex + 1} med ${rowItems.length} af ${round.perRow}`}
+            >
+              <span className="row-count">{rowItems.length}/{round.perRow}</span>
+              <div className="row-fruits">
+                {rowItems.map((item) => (
+                  <button
+                    type="button"
+                    className="fruit-button in-row"
+                    data-fruit-id={item.id}
+                    draggable
+                    key={item.id}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      if (selectedId && selectedId !== item.id) {
+                        moveItem(selectedId, rowIndex)
+                      } else {
+                        selectItem(item.id)
+                      }
+                    }}
+                    onDragStart={(event) => {
+                      event.dataTransfer.setData('text/plain', item.id)
+                      setDraggedId(item.id)
+                    }}
+                    onDragEnd={() => setDraggedId(null)}
+                  >
+                    <FruitImage item={item} fruit={round.fruit} selected={selectedId === item.id} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </section>
+
+      <p className="share-message lower" aria-live="polite">
+        {message}
+      </p>
+
+      {isComplete && (
+        <>
+          <Celebration />
+          <section className="finish-panel" aria-live="polite">
+            <h2>Flot bygget</h2>
+            <p>
+              {round.rows} × {round.perRow} = {round.total}
+            </p>
+            <button type="button" onClick={resetRound}>
+              Spil igen
+            </button>
+          </section>
+        </>
+      )}
+    </main>
   )
 }
 
@@ -743,6 +1016,7 @@ function WordMatchGame({ initialLanguage }) {
   const lastSpokenRef = useRef(null)
   const score = matchedIds.length
   const isComplete = score === round.items.length
+  const LanguageFlag = languageFlagComponents[language]
 
   useEffect(() => {
     setLanguage(initialLanguage)
@@ -858,7 +1132,7 @@ function WordMatchGame({ initialLanguage }) {
         <div className="word-game-topbar">
           <div>
             <p className="kicker">Sprog</p>
-            <h1>{languageFlags[language]} Ord-match</h1>
+            <h1><LanguageFlag className="header-flag" /> Ord-match</h1>
           </div>
           <div className="word-controls">
             <label>
@@ -1112,11 +1386,11 @@ export default function App() {
   const latestVersion = useVersionNotice()
 
   return (
-    <div className={`app ${view === 'tier-venner' || view === 'ord-match' || view === 'fordel-aebler' ? 'game-app' : ''}`}>
+    <div className={`app ${view === 'tier-venner' || view === 'ord-match' || view === 'fordel-aebler' || view === 'byg-raekker' ? 'game-app' : ''}`}>
       <Header view={view} />
       <VersionNotice latestVersion={latestVersion} />
       <ErrorBoundary key={view}>
-        {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame initialLanguage={wordMatchLanguage} /> : view === 'fordel-aebler' ? <ShareApplesGame /> : <Home />}
+        {view === 'om' ? <About /> : view === 'tier-venner' ? <TenFriendsGame /> : view === 'ord-match' ? <WordMatchGame initialLanguage={wordMatchLanguage} /> : view === 'fordel-aebler' ? <ShareApplesGame /> : view === 'byg-raekker' ? <BuildRowsGame /> : <Home />}
       </ErrorBoundary>
       <Footer />
     </div>

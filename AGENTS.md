@@ -33,6 +33,7 @@
 - Forside: kun kategoriserede tile-grids med aktiviteter, uden hero-/forklaringstekst. Brug foreløbigt kategorierne `Tal` og `Sprog`.
 - Første aktivitet: `10'er-venner`, et matematikspil hvor elever vælger to tal fra 1-9, der tilsammen giver 10
 - Tal-aktivitet: `Fordel æbler`, et begynderspil til division hvor elever fordeler op til 10 æbler ligeligt mellem 2-4 børn.
+- Tal-aktivitet: `Byg rækker`, et begynderspil til gange hvor elever bygger 2-5 rækker med lige mange frugter i hver række.
 - Anden aktivitet: `Ord-match`, et sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner. Forsiden skal kunne starte spillet direkte på dansk, engelsk eller tysk med tekst og flag.
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
@@ -56,8 +57,10 @@ Når versionen ændres, opdater `version` i `package.json`.
 - Hold ændringer små og lette at forstå.
 - Tilføj nye spil som selvstændige komponenter eller mapper, så forsiden kan vokse uden rod.
 - Spil til de yngste elever skal kunne bruges med både mus, touch og gerne simple tastatur-/skærmlæser-signaler.
+- Frugtspil bruger transparente PNG-assets fra `public/images/objects`; hold nye frugter i samme venlige maskot-/tegneseriestil og navngiv filer med ASCII-navne.
 - `10'er-venner` skal passe på én skærm uden lodret eller vandret scrollbar, også ved 1280x720 og små mobilvisninger.
 - `Fordel æbler` skal kunne bruges med både drag/drop og tryk-for-at-flytte, og skal passe på én skærm på desktop og telefon.
+- `Byg rækker` skal kunne bruges med både drag/drop og tryk-for-at-flytte, og skal passe på én skærm på desktop og telefon.
 - `Ord-match` skal passe på én skærm uden scrollbar på både desktop og telefon. På telefon bruges primært tryk-for-at-matche i stedet for drag/drop.
 - I `Ord-match` skal klik på ord eller ikon oplæse ordet på det valgte sprog, men samme ord må ikke oplæses to gange i træk.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
