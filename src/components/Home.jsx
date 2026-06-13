@@ -26,6 +26,17 @@ function PlantTileIcon() {
   )
 }
 
+function MemoryTileIcon() {
+  return (
+    <svg className="tile-memory-icon" viewBox="0 0 48 48" aria-hidden="true">
+      <rect x="7" y="8" width="18" height="22" rx="4" fill="#ff7eb6" stroke="#243044" strokeWidth="2.2" transform="rotate(-8 16 19)" />
+      <rect x="22" y="13" width="18" height="22" rx="4" fill="#8ee3f5" stroke="#243044" strokeWidth="2.2" transform="rotate(7 31 24)" />
+      <circle cx="16" cy="19" r="4" fill="#fff6bf" />
+      <path d="M28 23 L32 18 L36 23 L32 28 Z" fill="#fff6bf" />
+    </svg>
+  )
+}
+
 // Forsiden: kategoriserede tiles for de rigtige aktiviteter (ingen "kommer snart"-kort).
 export function Home() {
   const categories = useMemo(
@@ -106,6 +117,19 @@ export function Home() {
             accent: 'tile-plant',
             href: '#byg-plante',
             icon: <PlantTileIcon />,
+          },
+        ],
+      },
+      {
+        title: 'For sjov',
+        tiles: [
+          {
+            title: 'Memory',
+            subject: 'Huskespil',
+            description: 'Find par med frugter og figurer.',
+            accent: 'tile-memory',
+            href: '#memory',
+            icon: <MemoryTileIcon />,
           },
         ],
       },

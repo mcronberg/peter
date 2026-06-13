@@ -13,8 +13,9 @@ import { BuildRowsGame } from './games/BuildRowsGame.jsx'
 import { WordMatchGame } from './games/WordMatchGame.jsx'
 import { EclipseGame } from './games/EclipseGame.jsx'
 import { PlantBuilderGame } from './games/PlantBuilderGame.jsx'
+import { MemoryGame } from './games/MemoryGame.jsx'
 
-const gameViews = ['tier-venner', 'ord-match', 'fordel-aebler', 'byg-raekker', 'solformoerkelse', 'byg-plante']
+const gameViews = ['tier-venner', 'ord-match', 'fordel-aebler', 'byg-raekker', 'solformoerkelse', 'byg-plante', 'memory']
 
 // Vælger hvilken side/spil der vises ud fra det aktuelle view (hash-routing).
 function renderView(view, wordMatchLanguage) {
@@ -33,6 +34,8 @@ function renderView(view, wordMatchLanguage) {
       return <EclipseGame />
     case 'byg-plante':
       return <PlantBuilderGame />
+    case 'memory':
+      return <MemoryGame />
     default:
       return <Home />
   }
