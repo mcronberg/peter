@@ -210,7 +210,7 @@ function Header({ view }) {
           <span>C</span>
           <span>B</span>
         </span>
-        <span>peter.app</span>
+        <span>PetersApp</span>
       </a>
       <nav className="main-nav" aria-label="Hovedmenu">
         {view !== 'hjem' && <a href="#hjem">Hjem</a>}
@@ -317,7 +317,7 @@ function WordMatchGame() {
   const [language, setLanguage] = useState('da')
   const [round, setRound] = useState(() => createWordRound())
   const [matchedIds, setMatchedIds] = useState([])
-  const [message, setMessage] = useState('Træk et ord til et ikon, eller et ikon til et ord.')
+  const [message, setMessage] = useState('Træk eller tryk et ord og ikon sammen.')
   const [dragged, setDragged] = useState(null)
   const [picked, setPicked] = useState(null)
   const lastSpokenRef = useRef(null)
@@ -429,12 +429,7 @@ function WordMatchGame() {
 
   return (
     <main className="word-game-shell">
-      <section className="desktop-only-notice">
-        <h1>Ord-match</h1>
-        <p>Dette spil virker kun på desktop.</p>
-      </section>
-
-      <section className="word-game-desktop">
+      <section className="word-game">
         <div className="word-game-topbar">
           <div>
             <p className="kicker">Sprog</p>
@@ -693,7 +688,7 @@ function About() {
     <main className="page-shell narrow">
       <section className="about-panel" aria-labelledby="about-title">
         <p className="kicker">Om appen</p>
-        <h1 id="about-title">peter.app er en lille samling undervisningsværktøjer.</h1>
+        <h1 id="about-title">PetersApp er en lille samling undervisningsværktøjer.</h1>
         <p>
           Målet er at lave korte, visuelle aktiviteter til indskolingen: små spil, animationer og præsentationer, der kan bruges på klassens skærm eller prøves på en telefon, når aktiviteten passer til det.
         </p>
@@ -708,7 +703,7 @@ function About() {
 function Footer() {
   return (
     <footer className="site-footer">
-      <span>peter.app</span>
+      <span>PetersApp</span>
       <span>v{appVersion}</span>
     </footer>
   )

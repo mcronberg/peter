@@ -1,4 +1,4 @@
-# peter.app
+# PetersApp
 
 En lille React-app med spil, animationer og præsentationer til indskolingen.
 

@@ -629,7 +629,7 @@ h1 {
   flex: 1;
 }
 
-.word-game-desktop {
+.word-game {
   height: 100%;
   min-height: 0;
   display: grid;
@@ -639,8 +639,7 @@ h1 {
 
 .word-game-topbar,
 .word-column,
-.word-message,
-.desktop-only-notice {
+.word-message {
   border: 2px solid rgb(36 48 68 / 12%);
   border-radius: 16px;
   background: rgb(255 254 248 / 86%);
@@ -788,24 +787,6 @@ h1 {
   font-weight: 800;
 }
 
-.desktop-only-notice {
-  display: none;
-  padding: 20px;
-  text-align: center;
-}
-
-.desktop-only-notice h1 {
-  margin-bottom: 8px;
-  font-size: 2.4rem;
-}
-
-.desktop-only-notice p {
-  margin: 0;
-  color: #405069;
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-
 .confetti {
   position: fixed;
   inset: 0;
@@ -892,25 +873,94 @@ h1 {
 
   .game-shell {
     width: min(100% - 16px, 560px);
-    height: calc(100vh - 92px);
-    padding-bottom: 6px;
+    height: calc(100vh - 104px);
+    padding-bottom: 18px;
     gap: 6px;
   }
 
   .word-game-shell {
     width: min(100% - 16px, 560px);
     height: calc(100vh - 92px);
-    display: grid;
-    place-items: center;
     padding-bottom: 6px;
   }
 
-  .word-game-desktop {
+  .word-game {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+
+  .word-game-topbar {
+    min-height: 74px;
+    padding: 8px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .word-game-topbar .kicker {
     display: none;
   }
 
-  .desktop-only-notice {
-    display: block;
+  .word-game-topbar h1 {
+    font-size: clamp(1.5rem, 8vw, 2.1rem);
+  }
+
+  .word-controls {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .word-controls label,
+  .word-controls select,
+  .word-controls .score-pill,
+  .word-controls .icon-button {
+    font-size: 0.78rem;
+  }
+
+  .word-controls select {
+    min-height: 30px;
+    padding: 2px 26px 2px 7px;
+  }
+
+  .word-board {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .word-column {
+    padding: 6px;
+    gap: 5px;
+  }
+
+  .word-column h2 {
+    font-size: 1rem;
+  }
+
+  .word-card-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(10, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .word-card,
+  .word-icon-card {
+    border-radius: 10px;
+  }
+
+  .word-card {
+    font-size: clamp(0.9rem, 3.7vw, 1.2rem);
+  }
+
+  .word-icon-card svg {
+    width: clamp(22px, 5.2vh, 36px);
+    height: clamp(22px, 5.2vh, 36px);
+  }
+
+  .word-message {
+    min-height: 28px;
+    padding: 3px 8px;
+    font-size: 0.82rem;
   }
 
   .game-topbar {
