@@ -1,6 +1,16 @@
 import { useMemo } from 'react'
 import { DanishFlag, BritishFlag, GermanFlag } from './Flags.jsx'
 
+// Lille solformørkelse-ikon (Sol med Månen for): crescent-effekt som i selve spillet.
+function EclipseTileIcon() {
+  return (
+    <svg className="tile-eclipse-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="12" r="8" fill="#ffd000" />
+      <circle cx="15" cy="11" r="8" fill="#2c3340" />
+    </svg>
+  )
+}
+
 // Forsiden: kategoriserede tiles for de rigtige aktiviteter (ingen "kommer snart"-kort).
 export function Home() {
   const categories = useMemo(
@@ -60,6 +70,19 @@ export function Home() {
             accent: 'tile-words',
             href: '#ord-match-de',
             icon: <GermanFlag />,
+          },
+        ],
+      },
+      {
+        title: 'Natur',
+        tiles: [
+          {
+            title: 'Solformørkelse',
+            subject: 'Rummet',
+            description: 'Træk Månen foran Solen, og se det blive mørkt.',
+            accent: 'tile-eclipse',
+            href: '#solformoerkelse',
+            icon: <EclipseTileIcon />,
           },
         ],
       },

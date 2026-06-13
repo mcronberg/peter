@@ -11,8 +11,9 @@ import { TenFriendsGame } from './games/TenFriendsGame.jsx'
 import { ShareApplesGame } from './games/ShareApplesGame.jsx'
 import { BuildRowsGame } from './games/BuildRowsGame.jsx'
 import { WordMatchGame } from './games/WordMatchGame.jsx'
+import { EclipseGame } from './games/EclipseGame.jsx'
 
-const gameViews = ['tier-venner', 'ord-match', 'fordel-aebler', 'byg-raekker']
+const gameViews = ['tier-venner', 'ord-match', 'fordel-aebler', 'byg-raekker', 'solformoerkelse']
 
 // Vælger hvilken side/spil der vises ud fra det aktuelle view (hash-routing).
 function renderView(view, wordMatchLanguage) {
@@ -27,6 +28,8 @@ function renderView(view, wordMatchLanguage) {
       return <ShareApplesGame />
     case 'byg-raekker':
       return <BuildRowsGame />
+    case 'solformoerkelse':
+      return <EclipseGame />
     default:
       return <Home />
   }

@@ -11,5 +11,5 @@ export function useCurrentView() {
   }, [])
 
   if (view.startsWith('ord-match')) return 'ord-match'
-  return ['om', 'tier-venner', 'fordel-aebler', 'byg-raekker'].includes(view) ? view : 'hjem'
+  return ['om', 'tier-venner', 'fordel-aebler', 'byg-raekker', 'solformoerkelse'].includes(view) ? view : 'hjem'
 }
