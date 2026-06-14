@@ -8,8 +8,8 @@ const INPUTS = [
 ]
 
 const SLOTS = [
-  { key: 'leaf', label: 'Blade' },
-  { key: 'root', label: 'Rødder' },
+  { key: 'leaf', label: 'bladene' },
+  { key: 'root', label: 'rødderne' },
 ]
 
 const inputByKey = Object.fromEntries(INPUTS.map((input) => [input.key, input]))
@@ -71,7 +71,7 @@ function PhotosynthesisScene({ placed, isComplete }) {
         })}
       </g>
 
-      <g className="photo-plant">
+      <g className="photo-plant" transform="translate(50 35) scale(1.22) translate(-50 -35)">
         <path className={isComplete ? 'photo-water-flow active' : 'photo-water-flow'} d="M50 54 C49 47 50 39 50 31 C50 24 50 19 50 13" />
         <path d="M50 49 C49 39 51 27 50 14" fill="none" stroke="#3c9d4e" strokeWidth="3" strokeLinecap="round" />
         <ellipse cx="39" cy="28" rx="11" ry="5.4" transform="rotate(-24 39 28)" fill="#3fae5a" stroke="#2f9247" strokeWidth="0.7" />
@@ -187,15 +187,14 @@ export function PhotosynthesisGame() {
             type="button"
             className={`photo-slot ${slot.key} ${selected ? 'ready' : ''}`}
             key={slot.key}
+            aria-label={`Placér ved ${slot.label}`}
             onClick={() => selected && placeInput(slot.key, selected)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => {
               event.preventDefault()
               placeInput(slot.key, event.dataTransfer.getData('text/plain') || dragged)
             }}
-          >
-            {slot.label}
-          </button>
+          />
         ))}
       </section>
 
