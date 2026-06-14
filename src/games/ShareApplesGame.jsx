@@ -15,6 +15,7 @@ const appleProblems = [
   { apples: 10, children: 2 },
 ]
 const characterImages = ['dreng4.png', 'pige4.png', 'dreng5.png', 'pige5.png']
+const shareAppleSize = 64
 
 function formatAppleCount(count) {
   return `${count} ${count === 1 ? 'æble' : 'æbler'}`
@@ -31,6 +32,7 @@ function createAppleRound() {
     id: `apple-${index}`,
     look: {
       ...appleLooks[index % appleLooks.length],
+      size: shareAppleSize,
       flipped: Math.random() > 0.5,
     },
   }))
