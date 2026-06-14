@@ -26,6 +26,21 @@ function PlantTileIcon() {
   )
 }
 
+function PhotosynthesisTileIcon() {
+  return (
+    <svg className="tile-photo-icon" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="13" cy="12" r="6" fill="#ffd23f" stroke="#f2a81d" strokeWidth="1.8" />
+      <path d="M24 40 C24 31 25 24 24 15" fill="none" stroke="#3c9d4e" strokeWidth="3" strokeLinecap="round" />
+      <ellipse cx="18" cy="26" rx="8" ry="4" transform="rotate(-24 18 26)" fill="#3fae5a" stroke="#2f9247" strokeWidth="1" />
+      <ellipse cx="31" cy="25" rx="8" ry="4" transform="rotate(24 31 25)" fill="#58bd67" stroke="#2f9247" strokeWidth="1" />
+      <circle cx="37" cy="16" r="4.5" fill="#e8f4ff" stroke="#527aa3" strokeWidth="1.4" />
+      <text x="37" y="18.5" textAnchor="middle" fill="#243044" fontSize="5.5" fontWeight="900">CO₂</text>
+      <path d="M12 20 C17 23 20 24 25 25" fill="none" stroke="#f2a81d" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M36 21 C32 23 29 24 25 25" fill="none" stroke="#527aa3" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 function MemoryTileIcon() {
   return (
     <svg className="tile-memory-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -117,6 +132,14 @@ export function Home() {
             accent: 'tile-plant',
             href: '#byg-plante',
             icon: <PlantTileIcon />,
+          },
+          {
+            title: 'Fotosyntese',
+            subject: 'Planter',
+            description: 'Giv planten sol, vand og CO₂.',
+            accent: 'tile-photo',
+            href: '#fotosyntese',
+            icon: <PhotosynthesisTileIcon />,
           },
         ],
       },

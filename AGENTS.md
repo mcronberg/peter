@@ -37,6 +37,7 @@
 - Sprog-aktivitet: `Ord-match`, et sprogspil med dansk, engelsk og tysk, hvor 10 tilfældige ord vælges fra en pulje på 30 ord/ikoner. Forsiden skal kunne starte spillet direkte på dansk, engelsk eller tysk med tekst og flag.
 - Natur-aktivitet: `Solformørkelse`, en interaktiv forklaring hvor eleven trækker Månen foran Solen. Himlen bliver gradvist mørkere, Solen får en segl-form, og ved fuld dækning ses koronaen. Hele scenen er tegnet i ren SVG/CSS (ingen billed-assets).
 - Natur-aktivitet: `Byg en plante`, hvor eleven trækker plantens dele (rod, stængel, kimblad, blad, blomst) op på de rigtige pladser nedefra og op. Et par bier summer rundt i baggrunden. Ren SVG/CSS, ingen billed-assets.
+- Natur-aktivitet: `Fotosyntese`, en interaktiv procesmodel hvor eleven placerer sollys, vand og CO₂ ved planten og ser O₂ samt sukker/energi komme ud. Hold den konkret og lavtekstet.
 - For sjov-aktivitet: `Memory`, et vendespil med frugter og figurer fra appens egne assets. Eleven kan vælge sværhedsgrad.
 - Om-side: handler om appens formål, ikke Peters personlige profil
 - Footer: viser appnavn og version
@@ -47,7 +48,7 @@ Koden er opdelt i fokuserede moduler under `src/` – ét spil/komponent pr. fil
 
 - `src/App.jsx` – kun routing og layout-shell. Hvert nyt spil/side tilføjes som en `case` i `renderView`.
 - `src/main.jsx` – React-rod.
-- `src/games/` – ét spil pr. fil (`TenFriendsGame`, `ShareApplesGame`, `BuildRowsGame`, `WordMatchGame`, `EclipseGame`, `PlantBuilderGame`, `MemoryGame`). Spil-specifik data (fx regnestykker, farver) og hjælpere (fx `createXRound`, billed-komponenter) bor i samme fil som spillet.
+- `src/games/` – ét spil pr. fil (`TenFriendsGame`, `ShareApplesGame`, `BuildRowsGame`, `WordMatchGame`, `EclipseGame`, `PlantBuilderGame`, `PhotosynthesisGame`, `MemoryGame`). Spil-specifik data (fx regnestykker, farver) og hjælpere (fx `createXRound`, billed-komponenter) bor i samme fil som spillet.
 - `src/components/` – delte UI-komponenter (`Header`, `Footer`, `Home`, `About`, `VersionNotice`, `ErrorBoundary`, `Celebration`, `Flags`).
 - `src/hooks/` – delte hooks (`useCurrentView`, `useWordMatchLanguage`, `useVersionNotice`).
 - `src/lib/` – rene hjælpere uden UI (`shuffle`, `audio`/`playTone`, `speech`/`speakWord`, `version`).
@@ -82,6 +83,7 @@ Når versionen ændres, opdater `version` i `package.json`.
 - `Memory` skal have tydelig sværhedsgrad og bruge store kort, så det fungerer på både desktop og telefon.
 - `Solformørkelse` skal passe på én skærm uden scrollbar. Månen styres med mus, touch (pointer events) og piletaster, og der er en `Kør formørkelsen`-knap til klassens skærm. Hold scenen i ren SVG/CSS.
 - `Byg en plante` skal passe på én skærm uden scrollbar. Delene placeres med drag/drop og tryk-for-at-flytte, og pladserne kan også bruges med tastatur. Afslutningen er rolig (ingen `Celebration`): planten vugger blidt, og en ekstra bi kommer til.
+- `Fotosyntese` skal passe på én skærm uden scrollbar. Brug store inputbrikker og synlig proces-animation; undgå lange forklaringer i selve aktiviteten.
 - I `Ord-match` skal klik på ord eller ikon oplæse ordet på det valgte sprog, men samme ord må ikke oplæses to gange i træk.
 - Brug Web Audio API til små lyde, når det er nok; undgå tunge lydfiler uden god grund.
 - Brug den fælles `Celebration`-komponent til succes/afslutning i spil. Den vælger tilfældigt mellem flere festlige animationer.
